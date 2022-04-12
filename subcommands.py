@@ -1,7 +1,7 @@
 import keyboard as kb
 import mouse
 import time 
-
+import macro
 
 def openChat():
   kb.press('t')
@@ -37,13 +37,8 @@ def walkToFarm():
   kb.release('a')
   
 def startFarming():
-  try:
-    import macro
-    
     macro.init()
     macro.startMacro()
-  except:
-    print('unknown error, unable to start macro')
 
     
 def fullFarmCycle():

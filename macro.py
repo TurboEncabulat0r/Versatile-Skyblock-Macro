@@ -106,7 +106,7 @@ def init():
     except:
         pg.install()
 
-    keyboard.add_hotkey('l', lambda: startmacro())
-    print('macro init')
-    print('press key "l" or call from script to start')
+    #keyboard.add_hotkey('l', lambda: startmacro())
+    print('macro init complete')
+
     

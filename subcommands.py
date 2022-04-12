@@ -21,7 +21,7 @@ def pressEnter():
   kb.release('enter')
   
 
-def goToIs:
+def goToIs():
   openChat()
   type('/is')
   pressEnter()
@@ -36,8 +36,13 @@ def walkToFarm():
   
   if newDirCorrection:
     walk('left', 2)
-    walk('right', 2)
-    walk('left', 2)
+    time.sleep(0.1)
+    walk('right', 1)
+    time.sleep(0.1)
+    walk('left', .8)
+    time.sleep(0.25)
+    walk('right', 0.8)
+    walk('left', 1.5)
   else:
     kb.press('a')
     time.sleep(1.3)
@@ -51,7 +56,13 @@ def startFarming():
     
 def fullFarmCycle():
   goToHub()
+  time.sleep(1.2)
   goToIs()
+
+  time.sleep(0.4)
+  kb.press('shift')
+  time.sleep(0.2)
+  kb.release('shift')
   walkToFarm()
   startFarming()
   kb.wait('p')

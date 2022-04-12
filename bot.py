@@ -3,9 +3,9 @@ from discord.ext import commands
 import subcommands as sub
 import random 
 
-bot = commands.bot(command_prefix='.')
+bot = commands.Bot(command_prefix='.')
 
-token = ''
+token = 'OTYyODY0OTE5MzQxMDQ3ODkw.YlNv1Q.MDvppJ1GryCnzzMdOZcN4eSbRzU'
 
 
 @bot.event
@@ -19,22 +19,22 @@ async def dc(ctx):
   await ctx.send("attempting to disconnect")
   sub.disconnect()
 
-@bot.command(name='hub')
-async def hub(ctx):
+@bot.command(name='tohub')
+async def tohub(ctx):
   await ctx.send('going to hub')
   sub.goToHub()
   
-@bot.command(name='is')
-async def is(ctx):
+@bot.command(name='tois')
+async def tois(ctx):
   await ctx.send('going to is')
   sub.goToIs()
 
 @bot.command(name='say')
 async def say(ctx):
   imp = ctx.content
-  if inp.find(" ") != -1:
-    cmd = inp[0:inp.find(" ")]
-    subcmd = inp[inp.find(" ") + 1: len(inp)]
+  if imp.find(" ") != -1:
+    cmd = imp[0:imp.find(" ")]
+    subcmd = imp[imp.find(" ") + 1: len(imp)]
     sub.say(subcmd)
     
   else:
@@ -54,9 +54,9 @@ async def farmCycle(ctx):
 @bot.command(name='walkleft')
 async def walkleft(ctx):
   imp = ctx.content
-  if inp.find(" ") != -1:
-    cmd = inp[0:inp.find(" ")]
-    subcmd = inp[inp.find(" ") + 1: len(inp)]
+  if imp.find(" ") != -1:
+    cmd = imp[0:imp.find(" ")]
+    subcmd = imp[imp.find(" ") + 1: len(imp)]
     
     sub.walk('left', subcmd)
     
@@ -66,9 +66,9 @@ async def walkleft(ctx):
 @bot.command(name='walkright')
 async def walkright(ctx):
   imp = ctx.content
-  if inp.find(" ") != -1:
-    cmd = inp[0:inp.find(" ")]
-    subcmd = inp[inp.find(" ") + 1: len(inp)]
+  if imp.find(" ") != -1:
+    cmd = imp[0:imp.find(" ")]
+    subcmd = imp[imp.find(" ") + 1: len(imp)]
     
     sub.walk('right', subcmd)
     
@@ -78,9 +78,9 @@ async def walkright(ctx):
 @bot.command(name='walkforward')
 async def walkforward(ctx):
   imp = ctx.content
-  if inp.find(" ") != -1:
-    cmd = inp[0:inp.find(" ")]
-    subcmd = inp[inp.find(" ") + 1: len(inp)]
+  if imp.find(" ") != -1:
+    cmd = imp[0:imp.find(" ")]
+    subcmd = imp[imp.find(" ") + 1: len(imp)]
     
     sub.walk('up', subcmd)
     
@@ -90,9 +90,9 @@ async def walkforward(ctx):
 @bot.command(name='walkback')
 async def walkback(ctx):
   imp = ctx.content
-  if inp.find(" ") != -1:
-    cmd = inp[0:inp.find(" ")]
-    subcmd = inp[inp.find(" ") + 1: len(inp)]
+  if imp.find(" ") != -1:
+    cmd = imp[0:imp.find(" ")]
+    subcmd = imp[imp.find(" ") + 1: len(imp)]
     
     sub.walk('back', subcmd)
     

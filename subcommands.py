@@ -52,8 +52,39 @@ def fullFarmCycle():
   walkToFarm()
   startFarming()
   kb.wait('p')
-    
 
+  
+def say(text):
+  openChat()
+  type(text)
+  pressEnter()
+  
+  
+def disconnect():
+  kb.press('escape')
+  time.sleep(0.1)
+  kb.release('escape')
+  mouse.move(0, 10, absolute=False, duration=0.1)
+  mouse.click('left')
+
+  
+def walk(dir, duration):
+  if dir == 'left':
+    key = 'a'
+  elif dir == 'right':
+    key = 'd'
+  elif dir == 'up':
+    key = 'w'
+  elif dir == 'back':
+    key = 's
+  else:
+    print('key not recognised')
+  
+  kb.press(key)
+  time.sleep(duration)
+  kb.release(key)
+  
+  
 """
 if __name__ == '__main__':
   goToHub()

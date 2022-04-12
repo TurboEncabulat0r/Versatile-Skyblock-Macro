@@ -100,18 +100,13 @@ def on_press(key):
 def on_release(key):
     pass
 
-if __name__ == '__main__':
+def init():
     try:
         packages()
     except:
         pg.install()
 
     keyboard.add_hotkey('l', lambda: startmacro())
-    """
-    listener = kb.Listener(
-    on_press=on_press,
-    on_release=on_release)
-    listener.start()
-    """
-
-    keyboard.wait('p')
+    print('macro init')
+    print('press key "l" or call from script to start')
+    

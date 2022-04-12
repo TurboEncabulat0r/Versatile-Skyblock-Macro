@@ -37,8 +37,19 @@ def walkToFarm():
   kb.release('a')
   
 def startFarming():
-  import macro
-  macro.
+  try:
+    import macro
+    
+    macro.init()
+    macro.startMacro()
+  except:
+    print('unknown error, unable to start macro')
+
 
 
 if __name__ == '__main__':
+  goToHub()
+  goToIs()
+  walkToFarm()
+  startFarming()
+  kb.wait('p')

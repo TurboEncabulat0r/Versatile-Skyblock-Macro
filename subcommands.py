@@ -32,9 +32,17 @@ def goToHub():
   pressEnter()
  
 def walkToFarm():
-  kb.press('a')
-  time.sleep(1.3)
-  kb.release('a')
+  newDirCorrection = True
+  
+  if newDirCorrection:
+    walk('left', 2)
+    walk('right', 2)
+    walk('left', 2)
+  else:
+    kb.press('a')
+    time.sleep(1.3)
+    kb.release('a')
+  
   
 def startFarming():
     macro.init()

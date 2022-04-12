@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import subcommands as sub
-import random 
+import random, pyautogui
 
 bot = commands.Bot(command_prefix='.')
 
@@ -98,10 +98,20 @@ async def walkback(ctx):
     
   else:
     await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkback 2'")
-    
+
+@bot.command()
+async def sc(ctx):
+  image = pyautogui.
+  with io.BytesIO() as image_binary:
+    image.save(image_binary, 'PNG')
+    image_binary.seek(0)
+    await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
+
+
 @bot.command()
 async def test(ctx):
   ctx.send(f'gaming, {random.uniform(0.100, 0.400)}ms')
+
 """
 WIP i wish make this where you type 'walk left 2'
 @bot.command(name='walk')

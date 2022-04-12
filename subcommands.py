@@ -45,11 +45,20 @@ def startFarming():
   except:
     print('unknown error, unable to start macro')
 
+    
+def fullFarmCycle():
+  goToHub()
+  goToIs()
+  walkToFarm()
+  startFarming()
+  kb.wait('p')
+    
 
-
+"""
 if __name__ == '__main__':
   goToHub()
   goToIs()
   walkToFarm()
   startFarming()
   kb.wait('p')
+ """

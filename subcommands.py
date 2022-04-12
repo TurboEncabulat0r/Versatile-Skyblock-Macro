@@ -46,7 +46,7 @@ def walkToFarm():
   
 def startFarming():
     macro.init()
-    macro.startMacro()
+    macro.startmacro()
 
     
 def fullFarmCycle():

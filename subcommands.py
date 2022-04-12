@@ -17,7 +17,7 @@ def type(text, delay=0.04):
 
 def pressEnter():
   kb.press('enter')
-  time.sleep(0.3)
+  time.sleep(0.1)
   kb.release('enter')
   
 

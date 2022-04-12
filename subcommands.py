@@ -71,7 +71,7 @@ def walk(dir, duration):
   elif dir == 'up':
     key = 'w'
   elif dir == 'back':
-    key = 's
+    key = 's'
   else:
     print('key not recognised')
   

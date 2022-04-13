@@ -1,6 +1,4 @@
 import time, packages as pg
-
-
 def packages():
     global mouse, pyautogui, keyboard, np, Image, pynput, kb
     import keyboard, pyautogui, mouse
@@ -8,8 +6,6 @@ def packages():
     import numpy as np
     from PIL import Image
 
-
-tolerance = 10
 
 oldrightRGB = (106, 42, 101)
 oldleftRGB = (62, 14, 14)
@@ -30,25 +26,28 @@ def startmacro():
     keyboard.press(dir)
     startTime = time.time()
     count = 0
+    try:
+        while run:
+            count += 1
+            timestamp = time.time()
+            if checkRGB():
+                print("dir changed")
+                keyboard.press(dir)
 
-    while run:
-        count += 1
-        timestamp = time.time()
-        if checkRGB():
-            print("dir changed")
-            keyboard.press(dir)
+                if dir == 'a':
+                    keyboard.release('d')
+                else:
+                    keyboard.release('a')
 
-            if dir == 'a':
-                keyboard.release('d')
-            else:
-                keyboard.release('a')
-
-            if count > 250:
-                keyboard.press('w')
-                time.sleep(0.1)
-                keyboard.release('w')
-                count = 0
-        #print(round(time.time() - timestamp, 3))
+                if count > 250:
+                    keyboard.press('w')
+                    time.sleep(0.1)
+                    keyboard.release('w')
+                    count = 0
+        raiseExcept()    
+            #print(round(time.time() - timestamp, 3))
+    finally:
+        print('macro stopped')  
 
 
 def checkRGB():
@@ -79,7 +78,10 @@ def swapDir():
 def stopmacro():
     global run
     run = False
-    print('macro stopped')
+
+    
+def raiseExcept():
+    m = 1/0
 
 
 def on_press(key):
@@ -93,9 +95,9 @@ def on_press(key):
         swapDir()
 
 
+
 def on_release(key):
     pass
-
 
 def init():
     try:

@@ -106,6 +106,7 @@ def walk(dir, duration):
     time.sleep(duration)
     kb.release(key)
 
+    
 
 """
 if __name__ == '__main__':

@@ -155,7 +155,13 @@ async def stop(ctx):
 async def test(ctx):
     await ctx.send(f'gaming, {random.uniform(0.100, 0.400)}ms')
 
-
+@bot.command(name='switchdir')
+async def switchdir(ctx):
+    global thread1
+    await ctx.send('switching directions')
+    thread1.swapDir()
+    
+                      
 """
 WIP i wish make this where you type 'walk left 2'
 @bot.command(name='walk')

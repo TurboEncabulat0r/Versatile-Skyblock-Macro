@@ -23,38 +23,32 @@ running = False
 
 
 def startmacro():
-    global dir, run, running
+    global dir, run
+    print('starting macro')
+    mouse.move(0, 5, absolute=False, duration=0.2)
+    mouse.press(button='left')
+    keyboard.press(dir)
+    startTime = time.time()
+    count = 0
 
-    if not running:
+    while run:
+        count += 1
+        timestamp = time.time()
+        if checkRGB():
+            print("dir changed")
+            keyboard.press(dir)
 
-        running = True
-        print('starting macro')
-        mouse.move(0, 5, absolute=False, duration=0.2)
-        mouse.press(button='left')
-        keyboard.press(dir)
-        startTime = time.time()
-        count = 0
+            if dir == 'a':
+                keyboard.release('d')
+            else:
+                keyboard.release('a')
 
-        while run:
-            count += 1
-
-            if checkRGB():
-                print("dir changed")
-                keyboard.press(dir)
-
-                if dir == 'a':
-                    keyboard.release('d')
-                else:
-                    keyboard.release('a')
-
-                if count > 250:
-                    keyboard.press('w')
-                    time.sleep(0.1)
-                    keyboard.release('w')
-                    count = 0
-    else:
-        running = False
-        print('stopping macro')
+            if count > 250:
+                keyboard.press('w')
+                time.sleep(0.1)
+                keyboard.release('w')
+                count = 0
+        #print(round(time.time() - timestamp, 3))
 
 
 def checkRGB():
@@ -71,6 +65,7 @@ def checkRGB():
     if len(X) >= 1:
         dir = 'd'
         return True
+
 
 def swapDir():
     global dir
@@ -97,8 +92,10 @@ def on_press(key):
     if key == kb.Key(char='k'):
         swapDir()
 
+
 def on_release(key):
     pass
+
 
 def init():
     try:
@@ -106,7 +103,5 @@ def init():
     except:
         pg.install()
 
-    #keyboard.add_hotkey('l', lambda: startmacro())
+    # keyboard.add_hotkey('l', lambda: startmacro())
     print('macro init complete')
-
-    

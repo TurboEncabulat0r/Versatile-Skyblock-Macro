@@ -1,4 +1,6 @@
 import time, packages as pg
+import asyncio
+from threading import Thread
 def packages():
     global mouse, pyautogui, keyboard, np, Image, pynput, kb
     import keyboard, pyautogui, mouse
@@ -6,22 +8,36 @@ def packages():
     import numpy as np
     from PIL import Image
 
-
+#all of these values can be changed
 oldrightRGB = (106, 42, 101)
 oldleftRGB = (62, 14, 14)
 
 rightRGB = (72, 27, 76)
 leftRGB = (52, 18, 17)
 
+moveMouseDown = True
+devInfo = False
+
+
+# dont touch these
 dir = 'a'
 run = True
 running = False
+killThread = False 
 
 
 def startmacro():
+    global t1
+    t1 = Thread(target=macrostart).start()
+    
+
+
+def macrostart():
     global dir, run
     print('starting macro')
-    mouse.move(0, 5, absolute=False, duration=0.2)
+    if moveMouseDown:
+        mouse.move(0, 5, absolute=False, duration=0.2)
+        
     mouse.press(button='left')
     keyboard.press(dir)
     startTime = time.time()
@@ -44,7 +60,11 @@ def startmacro():
                     time.sleep(0.1)
                     keyboard.release('w')
                     count = 0
-        raiseExcept()    
+                    
+            if killThread:
+                run = False
+                break
+                    
             #print(round(time.time() - timestamp, 3))
     finally:
         print('macro stopped')  
@@ -65,7 +85,12 @@ def checkRGB():
         dir = 'd'
         return True
 
-
+    
+def rgbCheck(rgblist):
+    for i in rgblist:
+        print('wip')
+    
+    
 def swapDir():
     global dir
     print('switching dir')
@@ -76,13 +101,17 @@ def swapDir():
 
 
 def stopmacro():
+    global killThread, t1
+    killThread = True
+    t1.join()
+    
+    """
     global run
     run = False
-
+    """
     
 def raiseExcept():
     m = 1/0
-
 
 def on_press(key):
     print(type(key))
@@ -94,6 +123,11 @@ def on_press(key):
     if key == kb.Key(char='k'):
         swapDir()
 
+        
+class RGB():
+    def __init__(self, name, rgb):
+        self.name = name
+        self.rgb = rgb
 
 
 def on_release(key):

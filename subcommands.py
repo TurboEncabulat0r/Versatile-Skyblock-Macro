@@ -82,7 +82,7 @@ def disconnect():
     kb.press('escape')
     time.sleep(0.1)
     kb.release('escape')
-    mouse.move(0, 10, absolute=False, duration=0.1)
+    mouse.move(0, 40, absolute=False, duration=0.15)
     mouse.click('left')
 
 
@@ -119,7 +119,42 @@ def accepttrade():
     time.sleep(0.2)
     kb.release('enter')
     
+def pressKey(key, delay=0.15):
+    kb.press(key)
+    time.sleep(delay)
+    kb.release(key)
+    
+def openinv():
+    pressKey('e')
 
+def fixFarming():
+    mouse.press('left')
+    
+def mouseMove(dir, amm=5):
+    if dir == 'up':
+        mouse.move(0, amm * -1, absolute=False, delay=0.2)
+        return 'mouse moved ' + dir + ' by ' + amm
+    elif dir == 'down':
+        mouse.move(0, amm, absolute=False, delay=0.2)
+        return 'mouse moved ' + dir + ' by ' + amm
+    else:
+        return 'mouse failed to move, enter a valid direction'
+
+def breakCommand(text, returnCmd=False):
+    if returnCmd:
+        if text.find(" ") != -1:
+            cmd = text[0:text.find(" ")]
+            subcmd = text[text.find(" ") + 1: len(text)]
+            return (cmd, subcmd)
+        else:
+            return ''
+    else:
+        if text.find(" ") != -1:
+            cmd = text[0:text.find(" ")]
+            subcmd = text[text.find(" ") + 1: len(text)]
+            return subcmd
+        else:
+            return ''
 """
 if __name__ == '__main__':
   goToHub()

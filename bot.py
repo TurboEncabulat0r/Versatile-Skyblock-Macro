@@ -18,6 +18,8 @@ starttime = 0
 
 thread1 = 0
 
+sendReports = False
+
 @bot.event
 async def on_ready():
     print("bot ready")
@@ -34,16 +36,20 @@ async def dc(ctx):
 async def tohub(ctx):
     await ctx.send('going to hub')
     sub.goToHub()
+    if sendReports:
+        await sc(ctx)
 
 
 @bot.command(name='tois', brief='sends the player to the is')
 async def tois(ctx):
     await ctx.send('going to is')
     sub.goToIs()
+    if sendReports:
+        await sc(ctx)
 
 
 @bot.command(name='say', brief='says anything in minecraft chat')
-async def say(ctx, *, content):
+async def say(ctx):
     imp = ctx.message.content
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]
@@ -77,7 +83,7 @@ async def walkleft(ctx):
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
 
-        sub.walk('left', subcmd)
+        sub.walk('left', float(subcmd))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkleft 2'")
@@ -90,7 +96,7 @@ async def walkright(ctx, *, content):
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
 
-        sub.walk('right', subcmd)
+        sub.walk('right', float(subcmd))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkright 2'")
@@ -103,7 +109,7 @@ async def walkforward(ctx):
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
 
-        sub.walk('up', subcmd)
+        sub.walk('up', float(subcmd))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkforward 2'")
@@ -116,7 +122,7 @@ async def walkback(ctx):
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
 
-        sub.walk('back', subcmd)
+        sub.walk('back', float(subcmd))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkback 2'")
@@ -135,24 +141,27 @@ async def sc(ctx):
 async def runtime(ctx):
     if starttime != 0:
         if time.time() - starttime < 60:
-            await ctx.send(f'the macro has been running for {time.time() - starttime} sec')
+            await ctx.send(f'the macro has been running for {round(time.time() - starttime, 5)} sec')
         elif time.time() - starttime < 3600:
-            await ctx.send(f'the macro has been running for {(time.time() - starttime)/60} min')
+            await ctx.send(f'the macro has been running for {round((time.time() - starttime, 2)/60)} min')
         else:
-            await ctx.send(f'the macro has been running for {((time.time() - starttime)/60)/60} hours')
+            await ctx.send(f'the macro has been running for {round(((time.time() - starttime)/60)/60, 3)} hours')
     else:
         await ctx.send(f'the macro is currently not running')
 
                       
 @bot.command(name='stop', brief='stops the macro')
 async def stop(ctx):
-    sub.stopmacro()
+    thread1.stopmacro()
     await ctx.send('macro stopped')
+
+    if sendReports:
+        await sc(ctx)
 
 
 @bot.command(name='test', brief='dev stuff')
 async def test(ctx):
-    await ctx.send(f'gaming, {random.uniform(0.100, 0.400)}ms')
+    await ctx.send(f'ping {random.uniform(0.100, 0.400)}ms')
 
 @bot.command(name='switchdir')
 async def switchdir(ctx):

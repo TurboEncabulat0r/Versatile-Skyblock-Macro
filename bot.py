@@ -65,7 +65,8 @@ async def startFarming(ctx):
     global starttime, thread1
     await ctx.send('attempting to start farming')
     starttime = time.time()
-    thread1 = Thread(target=sub.startFarming).start()
+    #thread1 = Thread(target=sub.startFarming).start()
+    sub,startFarming
 
 
 @bot.command(name='farmcycle', brief='cycles the macro, resets the view and starts farming')
@@ -73,7 +74,8 @@ async def farmcycle(ctx):
     global starttime, thread1
     await ctx.send('attempting a full farming cycle')
     starttime = time.time()
-    thread1 = Thread(target=sub.fullFarmCycle).start()
+    #thread1 = Thread(target=sub.fullFarmCycle).start()
+    sub.fullFarmCycle()
 
 
 @bot.command(name='walkleft', brief='make the character walk left')
@@ -140,9 +142,9 @@ async def sc(ctx):
 @bot.command(name='runtime', brief='tells you how long the macro has been running for')
 async def runtime(ctx):
     if starttime != 0:
-        if time.time() - starttime < 60:
+        if time.time() - starttime < 60 and:
             await ctx.send(f'the macro has been running for {round(time.time() - starttime, 5)} sec')
-        elif time.time() - starttime < 3600:
+        elif time.time() - starttime > 60 and time.time() - starttime < 3600:
             await ctx.send(f'the macro has been running for {round((time.time() - starttime, 2)/60)} min')
         else:
             await ctx.send(f'the macro has been running for {round(((time.time() - starttime)/60)/60, 3)} hours')
@@ -168,8 +170,34 @@ async def switchdir(ctx):
     global thread1
     await ctx.send('switching directions')
     thread1.swapDir()
+
     
-                      
+@bot.command(name=inv)
+async def inv(ctx):
+    await ctx.send('opening inv')
+    sub.openinv()
+    
+    
+@bot.command(name='esc', brief='presses escape on the keyboard')
+async def esc(ctx):
+    await ctx.send('pressing escape')
+    sub.pressKey('escape')
+    
+
+@bot.command(name='sendreports', brief='to toggle on sending reports')
+async def sendreports(ctx):
+    global sendreports
+    if sendreports:
+        sendreports = False
+    else:
+        sendreports = True
+    await ctx.send(f'send reports now set to: {sendreports}')
+    
+@bot.command(name='resetView', brief='moves camera up to "reset" it')
+async def resetView():
+    sub.moveMouse('up', 5)
+    await ctx.send('mouse moved')
+
 """
 WIP i wish make this where you type 'walk left 2'
 @bot.command(name='walk')

@@ -13,8 +13,8 @@ class Config():
 def write(cfg):
   config['SETTINGS'] = {'token': cfg.token,
                         'RGB': cfg.RGB,
-                        'sendReports': 'yes',
-                        'devInfo': 'yes'}
+                        'sendReports': cfg.sendReports,
+                        'devInfo': cfg.devInfo}
   
   with open('config.ini', 'w') as configfile:
     config.write(configfile)

@@ -2,11 +2,10 @@ import io, time, random
 import subcommands as sub
 from threading import Thread
 import packages as pac
-
+from discord.ext import commands
 def packages():
-    global discord, commands
+    global discord, pyautogui
     import discord
-    from discord.ext import commands
     import keyboard, pyautogui, mouse
     from pynput import keyboard as kb
     import numpy as np
@@ -44,7 +43,7 @@ async def tois(ctx):
 
 
 @bot.command(name='say', brief='says anything in minecraft chat')
-async def say(ctx, *, content)):
+async def say(ctx, *, content):
     imp = ctx.message.content
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]
@@ -98,7 +97,7 @@ async def walkright(ctx, *, content):
 
 
 @bot.command(name='walkforward',brief='make the character walk forwards')
-async def walkforward(ctx:
+async def walkforward(ctx):
     imp = ctx.message.content
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]

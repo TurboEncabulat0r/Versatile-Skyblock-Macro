@@ -106,6 +106,18 @@ def walk(dir, duration):
     time.sleep(duration)
     kb.release(key)
 
+def accepttrade():
+    time.sleep(5)
+    kb.press('t')
+    time.sleep(0.2)
+    kb.release('t')
+
+    kb.write('/trade whitelisted14')
+    time.sleep(0.2)
+
+    kb.press('enter')
+    time.sleep(0.2)
+    kb.release('enter')
     
 
 """

@@ -3,6 +3,7 @@ import subcommands as sub
 from threading import Thread
 import packages as pac
 from discord.ext import commands
+import configparser
 def packages():
     global discord, pyautogui
     import discord
@@ -197,7 +198,14 @@ async def sendreports(ctx):
 async def resetView():
     sub.moveMouse('up', 5)
     await ctx.send('mouse moved')
+    
 
+@bot.command()
+async def updateCfg():
+    configparser.read
+    
+    
+    
 """
 WIP i wish make this where you type 'walk left 2'
 @bot.command(name='walk')
@@ -217,5 +225,5 @@ if __name__ == '__main__':
         packages()
     except:
         pac.install()
-                      
+    configparser.write()
     bot.run(token)

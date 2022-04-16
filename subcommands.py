@@ -36,7 +36,7 @@ def goToHub():
 
 
 def walkToFarm():
-    newDirCorrection = True
+    newDirCorrection = False
 
     if newDirCorrection:
         walk('left', 2)

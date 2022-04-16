@@ -12,6 +12,7 @@ def packages():
 oldrightRGB = (106, 42, 101)
 oldleftRGB = (62, 14, 14)
 
+fixcameraRGB = (143, 81, 196)
 rightRGB = (72, 27, 76)
 leftRGB = (52, 18, 17)
 
@@ -20,11 +21,13 @@ devInfo = False
 
 
 # dont touch these
-dir = 'a'
+dir = 'd'
 run = True
 running = False
 killThread = False 
-
+resetViewTimestamp = 0
+leftTimestamp = 0
+rightTimestamp = 0
 
 def startmacro():
     global t1
@@ -33,13 +36,12 @@ def startmacro():
 
 
 def macrostart():
-    global dir, run
+    global dir, run, killThread
     print('starting macro')
-    if moveMouseDown:
-        mouse.move(0, 5, absolute=False, duration=0.2)
+    #if moveMouseDown:
+    #   mouse.move(0, 5, absolute=False, duration=0.2)
         
     mouse.press(button='left')
-    keyboard.press(dir)
     startTime = time.time()
     count = 0
     try:
@@ -48,7 +50,6 @@ def macrostart():
             timestamp = time.time()
             if checkRGB():
                 print("dir changed")
-                keyboard.press(dir)
 
                 if dir == 'a':
                     keyboard.release('d')
@@ -63,33 +64,53 @@ def macrostart():
                     
             if killThread:
                 run = False
+                keyboard.release('a')
+                keyboard.release('d')
+                mouse.release('left')
                 break
                     
             #print(round(time.time() - timestamp, 3))
     finally:
-        print('macro stopped')  
+        print('macro stopped')
+        killThread = False
 
 
 def checkRGB():
-    global dir
+    global dir, resetViewTimestamp, rightTimestamp, leftTimestamp
     screenshot = pyautogui.screenshot()
     im = np.array(screenshot)
+
+    if resetViewTimestamp < time.time():
+        Y, X = np.where(np.all(im == fixcameraRGB, axis=2))
+        if len(X) >= 1:
+            oldDir = dir
+            swapDir()
+            keyboard.release(oldDir)
+            keyboard.press(dir)
+            mouse.move(0, 5, absolute=False, duration=0.2)
+            resetViewTimestamp = time.time() + 20
 
     Y, X = np.where(np.all(im == leftRGB, axis=2))
     if len(X) >= 1:
         dir = 'a'
+        keyboard.release('d')
+        keyboard.press(dir)
+
         return True
 
     Y, X = np.where(np.all(im == rightRGB, axis=2))
     if len(X) >= 1:
         dir = 'd'
+        keyboard.release('a')
+        keyboard.press(dir)
+
         return True
 
     
 def rgbCheck(rgblist):
     for i in rgblist:
         print('wip')
-    
+
     
 def swapDir():
     global dir
@@ -103,8 +124,8 @@ def swapDir():
 def stopmacro():
     global killThread, t1
     killThread = True
-    t1.join()
-    
+    #t1.join()
+
     """
     global run
     run = False

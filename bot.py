@@ -3,7 +3,7 @@ import subcommands as sub
 from threading import Thread
 import packages as pac
 from discord.ext import commands
-import configparser
+import configmanager
 def packages():
     global discord, pyautogui
     import discord
@@ -17,7 +17,6 @@ bot = commands.Bot(command_prefix='.')
 token = 'OTYyODY0OTE5MzQxMDQ3ODkw.YlNv1Q.MDvppJ1GryCnzzMdOZcN4eSbRzU'
 starttime = 0
 
-thread1 = 0
 
 sendReports = False
 
@@ -63,19 +62,17 @@ async def say(ctx):
 
 @bot.command(name='startFarming', brief='forces to start farming, use farmcycle instead')
 async def startFarming(ctx):
-    global starttime, thread1
+    global starttime
     await ctx.send('attempting to start farming')
     starttime = time.time()
-    #thread1 = Thread(target=sub.startFarming).start()
-    sub,startFarming
+    sub.startFarming()
 
 
 @bot.command(name='farmcycle', brief='cycles the macro, resets the view and starts farming')
 async def farmcycle(ctx):
-    global starttime, thread1
+    global starttime
     await ctx.send('attempting a full farming cycle')
     starttime = time.time()
-    #thread1 = Thread(target=sub.fullFarmCycle).start()
     sub.fullFarmCycle()
 
 
@@ -120,7 +117,7 @@ async def walkforward(ctx):
 
 @bot.command(name='walkback', brief='make the character walk backwards')
 async def walkback(ctx):
-    imp = ctx.messgae.content
+    imp = ctx.message.content
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
@@ -143,7 +140,7 @@ async def sc(ctx):
 @bot.command(name='runtime', brief='tells you how long the macro has been running for')
 async def runtime(ctx):
     if starttime != 0:
-        if time.time() - starttime < 60 and:
+        if time.time() - starttime < 60:
             await ctx.send(f'the macro has been running for {round(time.time() - starttime, 5)} sec')
         elif time.time() - starttime > 60 and time.time() - starttime < 3600:
             await ctx.send(f'the macro has been running for {round((time.time() - starttime, 2)/60)} min')
@@ -155,7 +152,7 @@ async def runtime(ctx):
                       
 @bot.command(name='stop', brief='stops the macro')
 async def stop(ctx):
-    thread1.stopmacro()
+    sub.stopmacro()
     await ctx.send('macro stopped')
 
     if sendReports:
@@ -168,12 +165,10 @@ async def test(ctx):
 
 @bot.command(name='switchdir')
 async def switchdir(ctx):
-    global thread1
     await ctx.send('switching directions')
-    thread1.swapDir()
 
     
-@bot.command(name=inv)
+@bot.command(name='inv')
 async def inv(ctx):
     await ctx.send('opening inv')
     sub.openinv()
@@ -195,14 +190,14 @@ async def sendreports(ctx):
     await ctx.send(f'send reports now set to: {sendreports}')
     
 @bot.command(name='resetView', brief='moves camera up to "reset" it')
-async def resetView():
+async def resetView(ctx):
     sub.moveMouse('up', 5)
     await ctx.send('mouse moved')
     
 
 @bot.command()
 async def updateCfg():
-    configparser.read
+    configmanager.read()
     
     
     
@@ -225,5 +220,5 @@ if __name__ == '__main__':
         packages()
     except:
         pac.install()
-    configparser.write()
+    #configmanager.write()
     bot.run(token)

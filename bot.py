@@ -65,7 +65,7 @@ async def startFarming(ctx):
     global starttime
     await ctx.send('attempting to start farming')
     starttime = time.time()
-    sub.startFarming()
+    sub.resumeFarming()
 
 
 @bot.command(name='farmcycle', brief='cycles the macro, resets the view and starts farming')
@@ -130,7 +130,7 @@ async def walkback(ctx):
 
 @bot.command(name='sc', brief='takes a screenshot and sends it')
 async def sc(ctx):
-    image = pyautogui.screenshot()
+    image = pyautogui.screenshot(region=(576,200, 768, 800))
     with io.BytesIO() as image_binary:
         image.save(image_binary, 'PNG')
         image_binary.seek(0)

@@ -57,6 +57,10 @@ def startFarming():
     macro.init()
     macro.startmacro()
 
+def resumeFarming():
+    macro.init()
+    macro.resumeMacro()
+
 
 def fullFarmCycle():
     goToHub()

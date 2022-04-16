@@ -33,7 +33,9 @@ def startmacro():
     global t1
     t1 = Thread(target=macrostart).start()
     
-
+def resumeMacro():
+    global t1
+    t1 = Thread(target=resume).start()
 
 def macrostart():
     global dir, run, killThread
@@ -46,8 +48,6 @@ def macrostart():
     count = 0
     try:
         while run:
-            count += 1
-            timestamp = time.time()
             if checkRGB():
                 print("dir changed")
 
@@ -56,12 +56,6 @@ def macrostart():
                 else:
                     keyboard.release('a')
 
-                if count > 250:
-                    keyboard.press('w')
-                    time.sleep(0.1)
-                    keyboard.release('w')
-                    count = 0
-                    
             if killThread:
                 run = False
                 keyboard.release('a')
@@ -75,9 +69,48 @@ def macrostart():
         killThread = False
 
 
+def resume():
+    global dir, run, killThread
+    print('resuming macro')
+    # if moveMouseDown:
+    mouse.move(0, 5, absolute=False, duration=0.2)
+    dir = 'a'
+    keyboard.press(dir)
+    mouse.press(button='left')
+    try:
+        while run:
+            if checkRGB():
+                print("dir changed")
+
+                if dir == 'a':
+                    keyboard.release('d')
+                else:
+                    keyboard.release('a')
+
+            if killThread:
+                run = False
+                break
+
+            # print(round(time.time() - timestamp, 3))
+    finally:
+        print('macro stopped')
+        killThread = False
+        run=True
+        keyboard.release('a')
+        keyboard.release('d')
+        mouse.release('left')
+
+
 def checkRGB():
     global dir, resetViewTimestamp, rightTimestamp, leftTimestamp
-    screenshot = pyautogui.screenshot()
+    timestamp = time.time()
+
+    useOldRange = False
+    if useOldRange:
+        screenshot = pyautogui.screenshot()
+    else:
+        screenshot = pyautogui.screenshot(region=(576,200, 768, 800))
+
     im = np.array(screenshot)
 
     if resetViewTimestamp < time.time():
@@ -89,22 +122,25 @@ def checkRGB():
             keyboard.press(dir)
             mouse.move(0, 5, absolute=False, duration=0.2)
             resetViewTimestamp = time.time() + 20
+            #print(f'time to parse image: {time.time() - timestamp}')
+            return True
 
     Y, X = np.where(np.all(im == leftRGB, axis=2))
-    if len(X) >= 1:
+    if len(X) >= 1 and dir == 'd':
         dir = 'a'
         keyboard.release('d')
         keyboard.press(dir)
-
+        #print(f'time to parse image: {time.time() - timestamp}')
         return True
 
     Y, X = np.where(np.all(im == rightRGB, axis=2))
-    if len(X) >= 1:
+    if len(X) >= 1 and dir == 'a':
         dir = 'd'
         keyboard.release('a')
         keyboard.press(dir)
-
+        #print(f'time to parse image: {time.time() - timestamp}')
         return True
+    #print(f'time to parse image: {time.time() - timestamp}')
 
     
 def rgbCheck(rgblist):
@@ -124,7 +160,12 @@ def swapDir():
 def stopmacro():
     global killThread, t1
     killThread = True
-    #t1.join()
+    """
+    try:
+        t1.join()
+    except:
+        killThread = False
+    """
 
     """
     global run
@@ -134,25 +175,12 @@ def stopmacro():
 def raiseExcept():
     m = 1/0
 
-def on_press(key):
-    print(type(key))
-    print(key == kb.Key(char='l'))
-    return ''
-    if key == kb.Key(char='l'):
-        startmacro()
 
-    if key == kb.Key(char='k'):
-        swapDir()
-
-        
 class RGB():
     def __init__(self, name, rgb):
         self.name = name
         self.rgb = rgb
 
-
-def on_release(key):
-    pass
 
 def init():
     try:

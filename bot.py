@@ -130,7 +130,7 @@ async def walkback(ctx):
 
 @bot.command(name='sc', brief='takes a screenshot and sends it')
 async def sc(ctx):
-    image = pyautogui.screenshot(region=(576,200, 768, 800))
+    image = pyautogui.screenshot()
     with io.BytesIO() as image_binary:
         image.save(image_binary, 'PNG')
         image_binary.seek(0)

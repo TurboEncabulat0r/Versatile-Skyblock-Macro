@@ -199,7 +199,9 @@ async def resetView(ctx):
 async def updateCfg():
     configmanager.read()
     
-    
+@bot.command()
+async def netherwart(ctx):
+    sub.netherwart()
     
 """
 WIP i wish make this where you type 'walk left 2'

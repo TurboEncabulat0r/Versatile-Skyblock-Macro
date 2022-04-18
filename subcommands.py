@@ -2,6 +2,7 @@ import keyboard as kb
 import mouse
 import time
 import macro
+from modules import netherwart as nw
 
 def openChat():
     kb.press('t')
@@ -133,7 +134,11 @@ def openinv():
 
 def fixFarming():
     mouse.press('left')
-    
+
+def netherwart():
+    nw.init()
+    nw.resumeMacro()
+
 def mouseMove(dir, amm=5):
     if dir == 'up':
         mouse.move(0, amm * -1, absolute=False, delay=0.2)

@@ -17,6 +17,7 @@ bot = commands.Bot(command_prefix='.')
 token = 'OTYyODY0OTE5MzQxMDQ3ODkw.YlNv1Q.MDvppJ1GryCnzzMdOZcN4eSbRzU'
 starttime = 0
 
+farmMacroing = ''
 
 sendReports = False
 
@@ -61,7 +62,7 @@ async def say(ctx):
 
 
 @bot.command(name='startFarming', brief='forces to start farming, use farmcycle instead')
-async def startFarming(ctx):
+async def resume(ctx):
     global starttime
     await ctx.send('attempting to start farming')
     starttime = time.time()
@@ -69,7 +70,7 @@ async def startFarming(ctx):
 
 
 @bot.command(name='farmcycle', brief='cycles the macro, resets the view and starts farming')
-async def farmcycle(ctx):
+async def potatocycle(ctx):
     global starttime
     await ctx.send('attempting a full farming cycle')
     starttime = time.time()
@@ -83,7 +84,7 @@ async def walkleft(ctx):
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
 
-        sub.walk('left', float(subcmd))
+        Thread(target=sub.walk, args=('left', float(subcmd)))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkleft 2'")
@@ -96,7 +97,7 @@ async def walkright(ctx, *, content):
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
 
-        sub.walk('right', float(subcmd))
+        Thread(target=sub.walk, args=('right', float(subcmd)))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkright 2'")
@@ -109,7 +110,7 @@ async def walkforward(ctx):
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
 
-        sub.walk('up', float(subcmd))
+        Thread(target=sub.walk, args=('up', float(subcmd))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkforward 2'")
@@ -122,7 +123,7 @@ async def walkback(ctx):
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
 
-        sub.walk('back', float(subcmd))
+        Thread(target=sub.walk, args=('back', float(subcmd))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkback 2'")
@@ -161,7 +162,7 @@ async def stop(ctx):
 
 @bot.command(name='test', brief='dev stuff')
 async def test(ctx):
-    await ctx.send(f'ping {random.uniform(0.100, 0.400)}ms')
+    await ctx.send(f'ping {round(bot.latency * 1000)}ms')
 
 @bot.command(name='switchdir')
 async def switchdir(ctx):
@@ -201,6 +202,7 @@ async def updateCfg():
     
 @bot.command()
 async def netherwart(ctx):
+    await ctx.send('attempting to start netherwart macro')
     sub.netherwart()
     
 """
@@ -222,5 +224,9 @@ if __name__ == '__main__':
         packages()
     except:
         pac.install()
-    #configmanager.write()
+    try:
+        #configmanager.read()
+    except:
+        sub.configInit()
+        configmanager.write()
     bot.run(token)

@@ -71,10 +71,11 @@ async def resume(ctx):
 
 @bot.command(name='farmcycle', brief='cycles the macro, resets the view and starts farming')
 async def potatocycle(ctx):
-    global starttime
+    global starttime, farmMacroing
     await ctx.send('attempting a full farming cycle')
     starttime = time.time()
     sub.fullFarmCycle()
+    farmMacroing = 'pot'
 
 
 @bot.command(name='walkleft', brief='make the character walk left')

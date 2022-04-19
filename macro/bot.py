@@ -111,7 +111,7 @@ async def walkforward(ctx):
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
 
-        Thread(target=sub.walk, args=('up', float(subcmd))
+        Thread(target=sub.walk, args=('up', float(subcmd)))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkforward 2'")
@@ -124,7 +124,7 @@ async def walkback(ctx):
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
 
-        Thread(target=sub.walk, args=('back', float(subcmd))
+        Thread(target=sub.walk, args=('back', float(subcmd)))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkback 2'")
@@ -161,13 +161,9 @@ async def stop(ctx):
         await sc(ctx)
 
 
-@bot.command(name='test', brief='dev stuff')
-async def test(ctx):
+@bot.command(name='ping', brief='returns the latency')
+async def ping(ctx):
     await ctx.send(f'ping {round(bot.latency * 1000)}ms')
-
-@bot.command(name='switchdir')
-async def switchdir(ctx):
-    await ctx.send('switching directions')
 
     
 @bot.command(name='inv')
@@ -226,7 +222,7 @@ if __name__ == '__main__':
     except:
         pac.install()
     try:
-        #configmanager.read()
+        configmanager.read()
     except:
         sub.configInit()
         configmanager.write()

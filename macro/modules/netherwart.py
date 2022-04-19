@@ -1,6 +1,7 @@
 import time, packages as pg
-import asyncio
 from threading import Thread
+
+
 def packages():
     global mouse, pyautogui, keyboard, np, Image, pynput, kb
     import keyboard, pyautogui, mouse
@@ -8,41 +9,44 @@ def packages():
     import numpy as np
     from PIL import Image
 
-#all of these values can be changed
+
+# all of these values can be changed
 oldrightRGB = (106, 42, 101)
 oldleftRGB = (62, 14, 14)
 
 fixcameraRGB = (143, 81, 196)
-rightRGB = (72, 27, 76)
-leftRGB = (52, 18, 17)
+rightRGB = (84, 59, 16)
+leftRGB = (32, 36, 18)
 
 moveMouseDown = True
 devInfo = False
-
 
 # dont touch these
 dir = 'd'
 run = True
 running = False
-killThread = False 
+killThread = False
 resetViewTimestamp = 0
 leftTimestamp = 0
 rightTimestamp = 0
 
+
 def startmacro():
     global t1
     t1 = Thread(target=macrostart).start()
-    
+
+
 def resumeMacro():
     global t1
     t1 = Thread(target=resume).start()
 
+
 def macrostart():
     global dir, run, killThread
     print('starting macro')
-    #if moveMouseDown:
+    # if moveMouseDown:
     #   mouse.move(0, 5, absolute=False, duration=0.2)
-        
+
     mouse.press(button='left')
     startTime = time.time()
     count = 0
@@ -62,8 +66,8 @@ def macrostart():
                 keyboard.release('d')
                 mouse.release('left')
                 break
-                    
-            #print(round(time.time() - timestamp, 3))
+
+            # print(round(time.time() - timestamp, 3))
     finally:
         print('macro stopped')
         killThread = False
@@ -72,8 +76,6 @@ def macrostart():
 def resume():
     global dir, run, killThread
     print('resuming macro')
-    # if moveMouseDown:
-    mouse.move(0, 5, absolute=False, duration=0.2)
     dir = 'a'
     keyboard.press(dir)
     mouse.press(button='left')
@@ -95,7 +97,7 @@ def resume():
     finally:
         print('macro stopped')
         killThread = False
-        run=True
+        run = True
         keyboard.release('a')
         keyboard.release('d')
         mouse.release('left')
@@ -109,28 +111,16 @@ def checkRGB():
     if useOldRange:
         screenshot = pyautogui.screenshot()
     else:
-        screenshot = pyautogui.screenshot(region=(576,200, 768, 800))
+        screenshot = pyautogui.screenshot(region=(576, 200, 768, 800))
 
     im = np.array(screenshot)
-
-    if resetViewTimestamp < time.time():
-        Y, X = np.where(np.all(im == fixcameraRGB, axis=2))
-        if len(X) >= 1:
-            oldDir = dir
-            swapDir()
-            keyboard.release(oldDir)
-            keyboard.press(dir)
-            mouse.move(0, 5, absolute=False, duration=0.2)
-            resetViewTimestamp = time.time() + 20
-            #print(f'time to parse image: {time.time() - timestamp}')
-            return True
 
     Y, X = np.where(np.all(im == leftRGB, axis=2))
     if len(X) >= 1 and dir == 'd':
         dir = 'a'
         keyboard.release('d')
         keyboard.press(dir)
-        #print(f'time to parse image: {time.time() - timestamp}')
+        # print(f'time to parse image: {time.time() - timestamp}')
         return True
 
     Y, X = np.where(np.all(im == rightRGB, axis=2))
@@ -138,16 +128,16 @@ def checkRGB():
         dir = 'd'
         keyboard.release('a')
         keyboard.press(dir)
-        #print(f'time to parse image: {time.time() - timestamp}')
+        # print(f'time to parse image: {time.time() - timestamp}')
         return True
-    #print(f'time to parse image: {time.time() - timestamp}')
+    # print(f'time to parse image: {time.time() - timestamp}')
 
-    
+
 def rgbCheck(rgblist):
     for i in rgblist:
         print('wip')
 
-    
+
 def swapDir():
     global dir
     print('switching dir')
@@ -171,9 +161,6 @@ def stopmacro():
     global run
     run = False
     """
-    
-def raiseExcept():
-    m = 1/0
 
 
 class RGB():

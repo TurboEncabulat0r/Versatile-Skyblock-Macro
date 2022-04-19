@@ -11,7 +11,7 @@ class Config():
 
 
 def write(cfg):
-  config['SETTINGS'] = {'token': cfg.token,
+  config['MAIN SETTINGS'] = {'token': cfg.token,
                         'RGB': cfg.RGB,
                         'sendReports': cfg.sendReports,
                         'devInfo': cfg.devInfo}

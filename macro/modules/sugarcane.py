@@ -6,7 +6,7 @@ from threading import Thread
 rows = 30
 
 forwardTime = 30
-backtime = 30
+backTime = 30
 rightTime = 5
 leftTime = 5
 
@@ -17,7 +17,7 @@ completed = [False, False, False, False]
 pressed = [False, False, False, False]
 
 def cycle():
-    global run, killThreads, completed
+    global run, killThreads, completed, row
     try:
         mouse.press('left')
         while run:
@@ -70,6 +70,7 @@ def startMacro():
     t2 = Thread(target=cycle).start()
 
 def stopMacro():
+    global killThreads, run
     killThreads = True
     run = True
     releaseKeys()

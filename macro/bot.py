@@ -13,6 +13,8 @@ def packages():
     import numpy as np
     from PIL import Image
 
+idOfChannel = 968713627584589845
+
 bot = commands.Bot(command_prefix='.')
 
 token = 'OTYyODY0OTE5MzQxMDQ3ODkw.YlNv1Q.MDvppJ1GryCnzzMdOZcN4eSbRzU'

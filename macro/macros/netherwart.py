@@ -4,7 +4,7 @@ import keyboard, pyautogui, mouse
 import numpy as np
 from PIL import Image
 
-macroFlagRgb = [(106,86,51), (69, 69, 69)]
+macroFlagRgb = [(106,86,51)]
 
 # all of these values can be changed
 
@@ -80,15 +80,24 @@ def resume(moveMouse=True):
     dir = 'a'
     keyboard.press(dir)
     mouse.press(button='left')
+    timestamp = time.time()
     try:
         while run:
             if checkRGB():
+                timestamp = time.time()
                 print("dir changed")
 
                 if dir == 'a':
                     keyboard.release('d')
                 else:
                     keyboard.release('a')
+
+            if time.time() - timestamp >= getSec(4.3):
+                swapDir()
+            elif time.time() - timestamp >= getSec(8):
+                issueWithMacro = 'timeout'
+                stopmacro()
+                print(issueWithMacro)
 
             if killThread:
                 run = False
@@ -140,6 +149,9 @@ def swapDir():
     else:
         dir = 'a'
 
+def getSec(min):
+    return min * 60
+
 
 def stopmacro():
     global killThread, t1
@@ -156,6 +168,7 @@ def antiMacroCheck():
       im = np.array(screenshot)
       Y, X = np.where(np.all(im == i, axis=2))
       if len(X) >= 1:
+        print(f'macro tripped on rgb {i}')
         macroTripped = True
         releaseAllKeys()
         stopmacro()

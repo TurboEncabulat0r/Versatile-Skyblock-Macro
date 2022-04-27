@@ -45,9 +45,9 @@ def macrostart():
       macrocheck.start()
     else:
       macroCheckRunning = True
-    #if moveMouseDown:
-    #   mouse.move(0, 5, absolute=False, duration=0.2)
-    
+
+    dir = 'a'
+    keyboard.press(dir)
     mouse.press(button='left')
     startTime = time.time()
     count = 0
@@ -77,8 +77,6 @@ def macrostart():
 def resume(moveMouse=True):
     global dir, run, killThread
     print('resuming macro')
-    if moveMouse:
-      mouse.move(0, 5, absolute=False, duration=0.2)
     dir = 'a'
     keyboard.press(dir)
     mouse.press(button='left')
@@ -154,7 +152,8 @@ def antiMacroCheck():
   print('anit macro check now running')
   try:
     for i in macroFlagRgb:
-      im = pyautogui.screenshot()
+      screenshot = pyautogui.screenshot(region=(576,200, 768, 800))
+      im = np.array(screenshot)
       Y, X = np.where(np.all(im == i, axis=2))
       if len(X) >= 1:
         macroTripped = True

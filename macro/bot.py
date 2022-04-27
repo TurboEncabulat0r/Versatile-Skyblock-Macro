@@ -85,8 +85,8 @@ async def walkleft(ctx):
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
-
-        Thread(target=sub.walk, args=('left', float(subcmd)))
+        sub.walk('left', subcmd)
+        #Thread(target=sub.walk, args=('left', float(subcmd)))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkleft 2'")
@@ -98,8 +98,8 @@ async def walkright(ctx, *, content):
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
-
-        Thread(target=sub.walk, args=('right', float(subcmd)))
+        sub.walk('right', subcmd)
+        #Thread(target=sub.walk, args=('right', float(subcmd)))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkright 2'")
@@ -111,8 +111,8 @@ async def walkforward(ctx):
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
-
-        Thread(target=sub.walk, args=('up', float(subcmd)))
+        sub.walk('up', subcmd)
+        #Thread(target=sub.walk, args=('up', float(subcmd)))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkforward 2'")
@@ -124,8 +124,8 @@ async def walkback(ctx):
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
-
-        Thread(target=sub.walk, args=('back', float(subcmd)))
+        sub.walk('back', subcmd)
+        #Thread(target=sub.walk, args=('back', float(subcmd)))
 
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkback 2'")

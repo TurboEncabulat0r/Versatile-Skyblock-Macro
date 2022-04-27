@@ -21,7 +21,7 @@ These comamnds are used more than most in the bot, they are often used to stop a
 *Takes a string as an input and says it in chat, ex `.say hello`
 used to force send commands in chat such as when stuck in limbo*
 
-* **.stop**   
+* **.stop:**   
 *Used to stop the macro*
 
 * **.farmcycle:**  
@@ -57,8 +57,8 @@ Current implementation of this freezes the bot untill its done walking, in the f
 * **.runtime:**  
 *Returns the bots runtime and sends it in chat*
 
-* **.ping**  
+* **.ping:**  
 *Returns the latency of the bot*
 
-* **.sendreports**  
+* **.sendreports:**  
 *Toggels on and off the sending of reports, sending reports meaning sending screenshot after a comamnd completes so the user dosent have to type `.sc`*

@@ -1,9 +1,10 @@
 import io, time, random
-import subcommands as sub
+from scripts import subcommands as sub
 from threading import Thread
-import packages as pac
+from scripts import packages as pac
 from discord.ext import commands
 import configmanager
+import macrocontroller as controller
 def packages():
     global discord, pyautogui
     import discord
@@ -23,7 +24,7 @@ sendReports = False
 
 @bot.event
 async def on_ready():
-    print("bot ready")
+    print(f"bot initalised in {round(time.time() - initTime, 4)} seconds")
     print(f'logged in as {bot.user.name}')
 
 
@@ -196,12 +197,30 @@ async def resetView(ctx):
 @bot.command()
 async def updateCfg():
     configmanager.read()
-    
+
+
 @bot.command()
-async def netherwart(ctx):
-    await ctx.send('attempting to start netherwart macro')
-    sub.netherwart()
-    
+async def macro(ctx):
+  macro = sub.breakCommand(ctx.message.content)
+  
+  await ctx.send(f'attempting to run {macro} macro')
+  result = controller.attemptRun(macro)
+  if result == 'FNE':
+    await ctx.send(f"Macro file '{macro}' does not exist")
+  elif result == 'S':
+    await ctx.send(f'Macro {macro} has sucsessfully run')
+  else:
+    await ctx.send('unknown error occured, macro not started')
+
+@bot.command()
+async def stopflying(ctx):
+    sub.pressKey('shift', 2)
+
+@bot.command()
+async def presskey(ctx):
+    key = sub.breakCommand(ctx.message.content)
+    sub.pressKey(key)
+
 """
 WIP i wish make this where you type 'walk left 2'
 @bot.command(name='walk')
@@ -217,6 +236,7 @@ async def walk(ctx):
 """
 
 if __name__ == '__main__':
+    initTime = time.time()
     try:
         packages()
     except:
@@ -224,6 +244,8 @@ if __name__ == '__main__':
     try:
         configmanager.read()
     except:
-        sub.configInit()
-        configmanager.write()
+        print('config could not read')
+        #sub.configInit()
+        #configmanager.write()
+    controller.importAll()
     bot.run(token)

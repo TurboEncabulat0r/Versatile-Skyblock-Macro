@@ -1,11 +1,9 @@
-import time, packages as pg
+import time
 from threading import Thread
-def packages():
-    global mouse, pyautogui, keyboard, np, Image, pynput, kb
-    import keyboard, pyautogui, mouse
-    from pynput import keyboard as kb
-    import numpy as np
-    from PIL import Image
+import keyboard, pyautogui, mouse
+from pynput import keyboard as kb
+import numpy as np
+from PIL import Image
 
 #all of these values can be changed
 oldrightRGB = (106, 42, 101)
@@ -197,10 +195,6 @@ def releaseAllKeys():
 
 def init():
     global macrocheck
-    try:
-        packages()
-    except:
-        pg.install()
     macrocheck = Thread(target=antiMacroCheck)
     # keyboard.add_hotkey('l', lambda: startmacro())
     print('macro init complete')

@@ -24,9 +24,15 @@ def read():
   
   settings = configparser.ConfigParser()
   settings.read('config.ini')
+  for i in range(3):
+    try:
+      cfg.token = str(settings['token'])
+      cfg.RGB = tuple(settings['RGB'])
+      cfg.sendReports = bool(settings['sendReports'])
+      cfg.devInfo = bool(settings['devInfo'])
+    except:
+      print('error with config file')
+      print('writing config file and trying again')
+      write()
   
-  cfg.token = settings['token']
-  cfg.RGB = tuple(settings['RGB'])
-  cfg.sendReports = bool(settings['sendReports'])
-  cfg.devInfo = bool(settings['devInfo'])
   return cfg

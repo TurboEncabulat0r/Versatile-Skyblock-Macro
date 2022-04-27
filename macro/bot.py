@@ -85,7 +85,7 @@ async def walkleft(ctx):
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
-        sub.walk('left', subcmd)
+        sub.walk('left', float(subcmd))
         #Thread(target=sub.walk, args=('left', float(subcmd)))
 
     else:
@@ -98,7 +98,7 @@ async def walkright(ctx, *, content):
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
-        sub.walk('right', subcmd)
+        sub.walk('right', float(subcmd))
         #Thread(target=sub.walk, args=('right', float(subcmd)))
 
     else:
@@ -111,7 +111,7 @@ async def walkforward(ctx):
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
-        sub.walk('up', subcmd)
+        sub.walk('up', float(subcmd))
         #Thread(target=sub.walk, args=('up', float(subcmd)))
 
     else:
@@ -124,7 +124,7 @@ async def walkback(ctx):
     if imp.find(" ") != -1:
         cmd = imp[0:imp.find(" ")]
         subcmd = imp[imp.find(" ") + 1: len(imp)]
-        sub.walk('back', subcmd)
+        sub.walk('back', float(subcmd))
         #Thread(target=sub.walk, args=('back', float(subcmd)))
 
     else:

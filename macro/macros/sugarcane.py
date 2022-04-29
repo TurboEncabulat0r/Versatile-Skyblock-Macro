@@ -1,6 +1,6 @@
-import keyboard as kb
+#import keyboard as kb
 import time
-import mouse
+#import mouse
 from threading import Thread
 
 rows = 30
@@ -79,6 +79,7 @@ def test():
     print('sugarcane')
 
 def config():
+  print('returning cfg')
   return {'totalRows':rows,
          'forwardTime':forwardTime,
          'backTime':backTime,

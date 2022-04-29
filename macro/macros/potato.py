@@ -1,6 +1,6 @@
 import time
 from threading import Thread
-import keyboard, pyautogui, mouse
+#import keyboard, pyautogui, mouse
 import numpy as np
 from PIL import Image
 
@@ -198,6 +198,7 @@ def init():
 
 
 def config():
+  print('returning cfg')
   return {'startRGB':fixcameraRGB,
          'rightRGB':rightRGB,
          'leftRGB':leftRGB,

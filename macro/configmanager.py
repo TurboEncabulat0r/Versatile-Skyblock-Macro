@@ -1,38 +1,48 @@
 import configparser
+import macrocontroller as controller
 
 config = configparser.ConfigParser()
 
 class Config():
-  def __init__(self, token, RGB, sendReports, devInfo):
+  def __init__(self, token, sendReports, macros):
     self.token = token
-    self.RGB = RGB
     self.sendReports = sendReports
-    self.devInfo = devInfo
+    self.macros = macros
 
 
 def write(cfg):
-  config['MAIN SETTINGS'] = {'token': cfg.token,
-                        'RGB': cfg.RGB,
-                        'sendReports': cfg.sendReports,
-                        'devInfo': cfg.devInfo}
+  config['SETTINGS'] = {'token': 'token',
+                        'sendReports': 'sendReports'}
+  
+  for i in cfg:
+   config[i[0]] = i[1]
+
   
   with open('config.ini', 'w') as configfile:
     config.write(configfile)
                         
 def read():
-  cfg = Config()
+  cfg = Config(0, 0, 0)
   
-  settings = configparser.ConfigParser()
-  settings.read('config.ini')
-  for i in range(3):
-    try:
-      cfg.token = str(settings['token'])
-      cfg.RGB = tuple(settings['RGB'])
-      cfg.sendReports = bool(settings['sendReports'])
-      cfg.devInfo = bool(settings['devInfo'])
-    except:
-      print('error with config file')
-      print('writing config file and trying again')
-      write()
+  config = configparser.ConfigParser()
+  config.read('config.ini')
+
+  settings = config['SETTINGS']
   
-  return cfg
+  try:
+    cfg.token = str(settings['token'])
+    cfg.sendReports = bool(settings['sendReports'])
+
+    macros = []
+    for j in controller.getMacroList():
+      mac = {}
+      for m in list(config[j]):
+        mac[m] = j[m]
+
+
+    cfg.macros = macros
+
+    return cfg
+  except ImportError:
+    print('error with config file')
+  

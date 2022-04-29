@@ -17,6 +17,16 @@ idOfChannel = 968713627584589845
 
 bot = commands.Bot(command_prefix='.')
 
+#controller.importAll()
+#print(controller.getAllConfig())
+
+
+#config = configmanager.read()
+#controller.updateAllCfg(config.macros)
+
+#print('config could not be read, rewriting')
+#configmanager.write(controller.getAllConfig())
+
 token = 'OTYyODY0OTE5MzQxMDQ3ODkw.YlNv1Q.MDvppJ1GryCnzzMdOZcN4eSbRzU'
 starttime = 0
 
@@ -205,14 +215,20 @@ async def updateCfg():
 async def macro(ctx):
   macro = sub.breakCommand(ctx.message.content)
   
-  await ctx.send(f'attempting to run {macro} macro')
-  result = controller.attemptRun(macro)
-  if result == 'FNE':
+  await ctx.send(f'attempting to run {macro} macro...')
+  try:
+    controller.attemptRun(macro)
+    
+  except controller.FileNotExist:
     await ctx.send(f"Macro file '{macro}' does not exist")
-  elif result == 'S':
-    await ctx.send(f'Macro {macro} has sucsessfully run')
-  else:
+    return
+  except controller.IncorrectFileFormat:
+    await ctx.send(f'macro "{macro}" has an incorrect file format(or corruped)')
+    return
+  except:
     await ctx.send('unknown error occured, macro not started')
+    return
+  await ctx.send(f"macro {macro} sucsessfully run")
 
 @bot.command()
 async def stopflying(ctx):
@@ -243,11 +259,15 @@ if __name__ == '__main__':
         packages()
     except:
         pac.install()
+
+    #controller.importAll()
+
+
     try:
-        configmanager.read()
+        config = configmanager.read()
     except:
-        print('config could not read')
-        #sub.configInit()
-        #configmanager.write()
-    controller.importAll()
+        print('config could not be read, rewriting')
+        config = configmanager.Config(token, True, controller.getAllConfigs())
+        configmanager.write(config)
+    
     bot.run(token)

@@ -1,12 +1,13 @@
 import time
 from threading import Thread
-import keyboard, pyautogui, mouse
+#import keyboard, pyautogui, mouse
 import numpy as np
 from PIL import Image
-
+#from .. import events
 macroFlagRgb = [(106,86,51)]
 
 # all of these values can be changed
+
 
 fixcameraRGB = (143, 81, 196)
 rightRGB = (84, 59, 16)
@@ -27,7 +28,7 @@ resetViewTimestamp = 0
 leftTimestamp = 0
 rightTimestamp = 0
 macroTripped = False
-
+attempted = False
 def startmacro():
     global t1, macrocheck
     t1 = Thread(target=macrostart).start()
@@ -92,12 +93,14 @@ def resume(moveMouse=True):
                 else:
                     keyboard.release('a')
 
-            if time.time() - timestamp >= getSec(4.3):
+            if time.time() - timestamp >= getSec(1.5) and not attempted:
+                attempted = True
                 swapDir()
-            elif time.time() - timestamp >= getSec(8):
-                issueWithMacro = 'timeout'
+                events.sendEvent('macro has been paused for a large ammout of time, attempting to switch directions')
+            elif time.time() - timestamp >= getSec(4):
+                #events.sendEvent('macro has been paused for too long(not detecting blocks) stopping macro for safty')
                 stopmacro()
-                print(issueWithMacro)
+                print('stopping macro due to timeout')
 
             if killThread:
                 run = False
@@ -197,8 +200,15 @@ def init():
 
 
 def config():
-  return {'startRGB':fixcameraRGB,
-         'rightRGB':rightRGB,
+  print('returning cfg')
+  return {'rightRGB':rightRGB,
          'leftRGB':leftRGB,
          'doMacroCheck':doMacroCheck,
          'macroCheckFlags':macroFlagRgb}
+
+def updateCfg(cfg):
+  global rightRGB, leftRGB, doMacroCheck, macroFlagRgb
+  rightRGB = cfg['rightRGB']
+  leftRGB = cfg['leftRGB']
+  doMacroCheck = cfg['doMacroCheck']
+  macroFlagRgb = cfg['macroCheckFlags']    

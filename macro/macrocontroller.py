@@ -2,6 +2,9 @@ import os
 
 macros = []
 modules = []
+
+activeMacro = ''
+
 def importAll():
   global macros, modules
   directory = 'macros'
@@ -29,11 +32,29 @@ def attemptRun(name):
     
   try:
     exec(f'{name}.startmacro()')
+    activeMacro = name
     return 'S'
   except AttributeError:
     print('invalid file')
     return 'E'
+
+
+def stopMacro():
+  global activeMacro
+  name = activeMacro
+  
+  if name in macros:
+    print('stopping file')
+  else:
+    raise FileNotExist
     
+  try:
+    exec(f'{name}.stopmacro()')
+    activeMacro = ''
+    return 'S'
+  except AttributeError:
+    raise IncorrectFileFormat
+  
 
 def breakStr(text, returnCmd=False):
     if returnCmd:
@@ -53,10 +74,35 @@ def breakStr(text, returnCmd=False):
 
 
 def getAllConfig():
-  config = {}
+  print('getting all cfg')
+  config = []
   for i in macros:
     try:
-      config += exec(f'{i}.config()')
-    except:
+      ret = eval(f'{i}.config()', globals())
+      config.append([str(i), ret])
+    except ImportError:
       print(f'unknown error while attemping to grab config at name "{i}"')
   return config
+
+def updateAllCfg(cfg):
+  print('updating cfg')
+  print(cfg)
+  for i in cfg:
+    macro = i[0]
+    config = i [1]
+    print(f'updating config for {config}')
+    exec(f'{macro}.updateCfg(config)')
+
+
+def getMacroList():
+  return macros
+
+
+def getActiveMacro():
+  return activeMacro
+
+class FileNotExist(Exception):
+  pass
+
+class IncorrectFileFormat(Exception):
+  pass

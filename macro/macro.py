@@ -1,7 +1,7 @@
 import time
 from threading import Thread
-import keyboard, pyautogui, mouse
-from pynput import keyboard as kb
+#import keyboard, pyautogui, mouse
+#from pynput import keyboard as kb
 import numpy as np
 from PIL import Image
 

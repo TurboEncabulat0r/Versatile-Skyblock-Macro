@@ -27,7 +27,7 @@ bot = commands.Bot(command_prefix='.')
 #print('config could not be read, rewriting')
 #configmanager.write(controller.getAllConfig())
 
-token = 'OTYyODY0OTE5MzQxMDQ3ODkw.YlNv1Q.MDvppJ1GryCnzzMdOZcN4eSbRzU'
+token = ''
 starttime = 0
 
 farmMacroing = ''

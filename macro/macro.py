@@ -1,6 +1,6 @@
 import time
 from threading import Thread
-#import keyboard, pyautogui, mouse
+import keyboard, pyautogui, mouse
 #from pynput import keyboard as kb
 import numpy as np
 from PIL import Image
@@ -11,14 +11,14 @@ oldleftRGB = (62, 14, 14)
 
 
 # include all the rgb values that trigger the macrocheck
-macroFlagRgb = [(106,86,51), (69, 69, 69)]
+macroFlagRgb = [(69, 69, 69)]
 
 
-fixcameraRGB = (143, 81, 196)
-rightRGB = (72, 27, 76)
-leftRGB = (52, 18, 17)
+fixcameraRGB = (105, 49, 152)
+rightRGB = (40, 56, 49)
+leftRGB = (60, 35, 44)
 
-doMacroCheck = True
+doMacroCheck = False
 moveMouseDown = True
 devInfo = False
 
@@ -76,6 +76,7 @@ def macrostart():
     finally:
         print('macro stopped')
         killThread = False
+        run=True
 
 
 def resume(moveMouse=True):
@@ -128,7 +129,7 @@ def checkRGB():
             keyboard.release(oldDir)
             keyboard.press(dir)
             mouse.move(0, 5, absolute=False, duration=0.2)
-            resetViewTimestamp = time.time() + 20
+            resetViewTimestamp = time.time() + 400
             #print(f'time to parse image: {time.time() - timestamp}')
             return True
 
@@ -196,5 +197,7 @@ def releaseAllKeys():
 def init():
     global macrocheck
     macrocheck = Thread(target=antiMacroCheck)
+    killThread = False
+    run = True
     # keyboard.add_hotkey('l', lambda: startmacro())
     print('macro init complete')

@@ -27,7 +27,7 @@ bot = commands.Bot(command_prefix='.')
 #print('config could not be read, rewriting')
 #configmanager.write(controller.getAllConfig())
 
-token = ''
+token = 'OTYyODY0OTE5MzQxMDQ3ODkw.GM1370.le_my6vHe9R2vWJpvJIwexBs-z9KsK7ua3_qrw'
 starttime = 0
 
 farmMacroing = ''
@@ -145,6 +145,7 @@ async def walkback(ctx):
 
 @bot.command(name='sc', brief='takes a screenshot and sends it')
 async def sc(ctx):
+    #image = pyautogui.screenshot(region=(576, 200, 768, 800))
     image = pyautogui.screenshot()
     with io.BytesIO() as image_binary:
         image.save(image_binary, 'PNG')
@@ -202,14 +203,33 @@ async def sendreports(ctx):
     
 @bot.command(name='resetView', brief='moves camera up to "reset" it')
 async def resetView(ctx):
-    sub.moveMouse('up', 5)
+    sub.mouseMove('up', 5)
     await ctx.send('mouse moved')
-    
+
+@bot.command(name="moveMouse")
+async def moveMouse(ctx):
+    imp = ctx.message.content
+    if imp.find(" ") != -1:
+        cmd = imp[0:imp.find(" ")]
+        subcmd = imp[imp.find(" ") + 1: len(imp)]
+        sub.mouseMove('up', float(subcmd))
+        #Thread(target=sub.walk, args=('left', float(subcmd)))
+
+    else:
+        await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.moveMouse 2'")
+    await ctx.send('mouse moved')
+@bot.command(name='inverseReset', brief='moves camera down to "reset" it')
+async def inverseReset(ctx):
+    sub.mouseMove('down', 5)
+    await ctx.send('mouse moved')
+
+@bot.command()
+async def getALlMacros(ctx):
+    await ctx.send(controller.getAllMacros())
 
 @bot.command()
 async def updateCfg():
     configmanager.read()
-
 
 @bot.command()
 async def macro(ctx):
@@ -218,9 +238,8 @@ async def macro(ctx):
   await ctx.send(f'attempting to run {macro} macro...')
   try:
     controller.attemptRun(macro)
-    
   except controller.FileNotExist:
-    await ctx.send(f"Macro file '{macro}' does not exist")
+    await ctx.send(f"Macro file '{macro}' does not exist\nlist of macros: {controller.getMacroList()}")
     return
   except controller.IncorrectFileFormat:
     await ctx.send(f'macro "{macro}" has an incorrect file format(or corruped)')
@@ -228,6 +247,7 @@ async def macro(ctx):
   except:
     await ctx.send('unknown error occured, macro not started')
     return
+
   await ctx.send(f"macro {macro} sucsessfully run")
 
 @bot.command()

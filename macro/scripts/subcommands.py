@@ -136,11 +136,11 @@ def fixFarming():
 
 def mouseMove(dir, amm=5):
     if dir == 'up':
-        mouse.move(0, amm * -1, absolute=False, delay=0.2)
-        return 'mouse moved ' + dir + ' by ' + amm
+        mouse.move(0, amm * -1, absolute=False, duration=0.2)
+        return 'mouse moved ' + str(dir) + ' by ' + str(amm)
     elif dir == 'down':
-        mouse.move(0, amm, absolute=False, delay=0.2)
-        return 'mouse moved ' + dir + ' by ' + amm
+        mouse.move(0, amm, absolute=False, duration=0.2)
+        return 'mouse moved ' + str(dir) + ' by ' + str(amm)
     else:
         return 'mouse failed to move, enter a valid direction'
 

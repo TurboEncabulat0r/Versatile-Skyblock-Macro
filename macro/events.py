@@ -27,7 +27,7 @@ class Event(object):
         
   def start(self):
     self.killThreads = False
-    t1 = Thread(target=sequence).start()
+    t1 = Thread(target=self.sequence).start()
     
   def stop(self):
     self.killThreads = True

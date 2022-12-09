@@ -1,6 +1,6 @@
 import time
 from threading import Thread
-#import keyboard, pyautogui, mouse
+import keyboard, pyautogui, mouse
 import numpy as np
 from PIL import Image
 
@@ -9,9 +9,9 @@ from PIL import Image
 macroFlagRgb = [(106,86,51), (69, 69, 69)]
 
 
-fixcameraRGB = (143, 81, 196)
-rightRGB = (72, 27, 76)
-leftRGB = (52, 18, 17)
+fixcameraRGB = (141, 80, 193)
+rightRGB = (40, 56, 49)
+leftRGB = (60, 35, 44)
 
 doMacroCheck = True
 moveMouseDown = True

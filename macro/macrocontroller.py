@@ -38,6 +38,8 @@ def attemptRun(name):
     print('invalid file')
     return 'E'
 
+def getAllMacros():
+  return macros
 
 def stopMacro():
   global activeMacro

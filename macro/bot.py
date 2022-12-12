@@ -206,6 +206,14 @@ async def resetView(ctx):
     sub.mouseMove('up', 5)
     await ctx.send('mouse moved')
 
+@bot.command()
+async def leftClick(ctx):
+    sub.click("left")
+
+
+@bot.command()
+async def rightClick(ctx):
+    sub.click("right")
 @bot.command(name="moveMouse")
 async def moveMouse(ctx):
     imp = ctx.message.content

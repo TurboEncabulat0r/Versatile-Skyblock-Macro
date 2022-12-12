@@ -16,6 +16,9 @@ def type(text, delay=0.04):
         time.sleep(delay)
         kb.release(text[i])
 
+def click(m):
+    mouse.click(m)
+
 
 def pressEnter():
     kb.press('enter')

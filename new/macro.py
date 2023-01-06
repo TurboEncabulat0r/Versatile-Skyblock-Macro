@@ -11,6 +11,7 @@ class Macro:
         self.running = False
         self.keys = []
         self.stats = {}
+        self.paused = False
         self.init()
 
     def releaseAllKeys(self):
@@ -47,24 +48,35 @@ class Macro:
         self.releaseAllKeys()
         print(f"macro {self.name} stopped, and disposed")
 
+    def resume(self):
+        self.paused = False
+
     def start(self):
-        self.running = True
-        self.thr.start()
+        if self.paused == False:
+            self.running = True
+            self.thr.start()
+        else:
+            print("Macro already running, use resume instead")
+            raise(MacroAlreadyRunningException)
     
     def stop(self):
         print(f"stopping macro {self.name}")
         self.running = False
         self.dispose()
 
+    def togglePause(self):
+        self.paused = not self.paused
+
     def macro(self):
         statsTS = 0
         while self.running:
-            if statsTS <= time.time():
-                statsTS = time.time() + 4
-                self.stats = self.getStats()
+            if not self.paused:
+                if statsTS <= time.time():
+                    statsTS = time.time() + 4
+                    self.stats = self.getStats()
 
-            
-            self.update()
+
+                self.update()
 
     #this method should be overriden by the child class
     # will be called every iteration of the macro and is called after getStats
@@ -92,3 +104,5 @@ class Macro:
 
 
 
+class MacroAlreadyRunningException(Exception):
+    pass

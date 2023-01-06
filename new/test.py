@@ -7,10 +7,6 @@ class Test(Macro):
         self.init()
 
     def macro(self):
-        timestamp = 0
-        while self.running:
-            if timestamp <= time.time():
-                timestamp = time.time() + 4
-                print(f"test {time.time()}")
+        print(f"test {time.time()}")
 
     

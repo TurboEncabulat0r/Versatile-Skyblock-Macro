@@ -1,28 +1,20 @@
-import io, time, random
+import io, time
 from scripts import subcommands as sub
-from threading import Thread
 from discord.ext import commands
 import configmanager
 import macrocontroller as controller
 import discord
-import keyboard, pyautogui, mouse
-from pynput import keyboard as kb
+import pyautogui
 import numpy as np
 from PIL import Image
+from test import Test
 
 idOfChannel = 968713627584589845
 
 bot = commands.Bot(command_prefix='.')
 
-#controller.importAll()
-#print(controller.getAllConfig())
-
 
 config = configmanager.read()
-#controller.updateAllCfg(config.macros)
-
-#print('config could not be read, rewriting')
-#configmanager.write(controller.getAllConfig())
 
 token = config.token()
 starttime = 0
@@ -195,11 +187,6 @@ async def sendreports(ctx):
     else:
         sendreports = True
     await ctx.send(f'send reports now set to: {sendreports}')
-    
-@bot.command(name='resetView', brief='moves camera up to "reset" it')
-async def resetView(ctx):
-    sub.mouseMove('up', 5)
-    await ctx.send('mouse moved')
 
 @bot.command()
 async def leftClick(ctx):
@@ -221,37 +208,16 @@ async def moveMouse(ctx):
     else:
         await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.moveMouse 2'")
     await ctx.send('mouse moved')
-@bot.command(name='inverseReset', brief='moves camera down to "reset" it')
-async def inverseReset(ctx):
-    sub.mouseMove('down', 5)
-    await ctx.send('mouse moved')
 
 @bot.command()
-async def getALlMacros(ctx):
+async def getAllMacros(ctx):
     await ctx.send(controller.getAllMacros())
 
-@bot.command()
-async def updateCfg():
-    configmanager.read()
 
 @bot.command()
 async def macro(ctx):
-  macro = sub.breakCommand(ctx.message.content)
-  
-  await ctx.send(f'attempting to run {macro} macro...')
-  try:
-    controller.attemptRun(macro)
-  except controller.FileNotExist:
-    await ctx.send(f"Macro file '{macro}' does not exist\nlist of macros: {controller.getMacroList()}")
-    return
-  except controller.IncorrectFileFormat:
-    await ctx.send(f'macro "{macro}" has an incorrect file format(or corruped)')
-    return
-  except:
-    await ctx.send('unknown error occured, macro not started')
-    return
+    macro = sub.breakCommand(ctx.message.content)
 
-  await ctx.send(f"macro {macro} sucsessfully run")
 
 @bot.command()
 async def stopflying(ctx):
@@ -262,31 +228,5 @@ async def presskey(ctx):
     key = sub.breakCommand(ctx.message.content)
     sub.pressKey(key)
 
-"""
-WIP i wish make this where you type 'walk left 2'
-@bot.command(name='walk')
-async def walk(ctx):
-    imp = ctx.content
-  if inp.find(" ") != -1:
-    cmd = inp[0:inp.find(" ")]
-    subcmd = inp[inp.find(" ") + 1: len(inp)]
-
-
-  else:
-    await ctx.send("error, you need to add a direction to walk. ex '.say your mom'")
-"""
-
 if __name__ == '__main__':
-    initTime = time.time()
-
-    #controller.importAll()
-
-
-    try:
-        config = configmanager.read()
-    except:
-        print('config could not be read, rewriting')
-        config = configmanager.Config(token, True, controller.getAllConfigs())
-        configmanager.write(config)
-    
-    bot.run(token)
+    g = Test("gming")

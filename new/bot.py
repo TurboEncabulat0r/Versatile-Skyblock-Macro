@@ -7,8 +7,10 @@ import discord
 import pyautogui
 import numpy as np
 from PIL import Image
-from test import Test
+from new.macros.sugarcane import Sugarcane
 
+
+"""
 idOfChannel = 968713627584589845
 
 bot = commands.Bot(command_prefix='.')
@@ -227,6 +229,22 @@ async def stopflying(ctx):
 async def presskey(ctx):
     key = sub.breakCommand(ctx.message.content)
     sub.pressKey(key)
+"""
 
 if __name__ == '__main__':
-    g = Test("gming")
+    g = Sugarcane("gming")
+    g.start()
+
+    while True:
+        print("input to controll macro, d = data, p = pause, e = exit")
+        inp = input(">>")
+        if inp == 'd':
+            print(g.getData())
+        elif inp == 'p':
+            g.togglePause()
+            print("paused")
+        elif inp == 'e':
+            g.stop()
+            break
+        else:
+            pass

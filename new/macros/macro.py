@@ -3,7 +3,7 @@ from threading import Thread
 import keyboard as kb, pyautogui
 import numpy as np
 from PIL import Image
-from macrocheck import MacroCheck
+from macros.macrocheck import MacroCheck
 import mouse, random
 
 class Macro:
@@ -66,8 +66,7 @@ class Macro:
             self.running = True
             self.thr.start()
         else:
-            print("Macro already running, use resume instead")
-            raise(MacroAlreadyRunningException)
+            self.resume()
     
     def stop(self):
         print(f"stopping macro {self.name}")

@@ -1,7 +1,6 @@
 import keyboard as kb
 import mouse
 import time
-import macro
 
 def openChat():
     kb.press('t')
@@ -146,6 +145,23 @@ def mouseMove(dir, amm=5):
         return 'mouse moved ' + str(dir) + ' by ' + str(amm)
     else:
         return 'mouse failed to move, enter a valid direction'
+
+def breakString(st, breaker):
+    #returns a list of all words in a string
+    #breaker is the character that breaks the string
+    #ex: breakString('hello world', ' ') returns ['hello', 'world']
+
+    words = []
+    word = ''
+    for i in range(len(st)):
+        if st[i] == breaker:
+            words.append(word)
+            word = ''
+        else:
+            word += st[i]
+    words.append(word)
+    return words
+
 
 def breakCommand(text, returnCmd=False):
     if returnCmd:

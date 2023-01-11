@@ -7,16 +7,17 @@ import discord
 import pyautogui
 import numpy as np
 from PIL import Image
-from new.macros.sugarcane import Sugarcane
+from macros.sugarcane import Sugarcane
+from macros.netherwart import Netherwart
 
-
-"""
 idOfChannel = 968713627584589845
 
 bot = commands.Bot(command_prefix='.')
 
 
 config = configmanager.read()
+scane = Sugarcane("SugarCane")
+nw = Netherwart()
 
 token = config.token()
 starttime = 0
@@ -65,72 +66,17 @@ async def say(ctx):
 
 @bot.command(name='startFarming', brief='forces to start farming, use farmcycle instead')
 async def resume(ctx):
-    global starttime
-    await ctx.send('attempting to start farming')
-    starttime = time.time()
-    sub.resumeFarming()
+    nw.resume()
 
 
-@bot.command(name='farmcycle', brief='cycles the macro, resets the view and starts farming')
-async def potatocycle(ctx):
-    global starttime, farmMacroing
-    await ctx.send('attempting a full farming cycle')
-    starttime = time.time()
-    sub.fullFarmCycle()
-    farmMacroing = 'pot'
-
-
-@bot.command(name='walkleft', brief='make the character walk left')
-async def walkleft(ctx):
-    imp = ctx.message.content
-    if imp.find(" ") != -1:
-        cmd = imp[0:imp.find(" ")]
-        subcmd = imp[imp.find(" ") + 1: len(imp)]
-        sub.walk('left', float(subcmd))
-        #Thread(target=sub.walk, args=('left', float(subcmd)))
-
+@bot.command(name='walk', brief='.walk forward 4')
+async def walk(ctx):
+    msg = ctx.message.content
+    cmds = sub.breakString(msg, " ")
+    if len(cmds) == 3:
+        sub.walk(cmds[1], float(cmds[2]))
     else:
-        await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkleft 2'")
-
-
-@bot.command(name='walkright', brief='make the character walk right')
-async def walkright(ctx, *, content):
-    imp = ctx.message.content
-    if imp.find(" ") != -1:
-        cmd = imp[0:imp.find(" ")]
-        subcmd = imp[imp.find(" ") + 1: len(imp)]
-        sub.walk('right', float(subcmd))
-        #Thread(target=sub.walk, args=('right', float(subcmd)))
-
-    else:
-        await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkright 2'")
-
-
-@bot.command(name='walkforward',brief='make the character walk forwards')
-async def walkforward(ctx):
-    imp = ctx.message.content
-    if imp.find(" ") != -1:
-        cmd = imp[0:imp.find(" ")]
-        subcmd = imp[imp.find(" ") + 1: len(imp)]
-        sub.walk('up', float(subcmd))
-        #Thread(target=sub.walk, args=('up', float(subcmd)))
-
-    else:
-        await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkforward 2'")
-
-
-@bot.command(name='walkback', brief='make the character walk backwards')
-async def walkback(ctx):
-    imp = ctx.message.content
-    if imp.find(" ") != -1:
-        cmd = imp[0:imp.find(" ")]
-        subcmd = imp[imp.find(" ") + 1: len(imp)]
-        sub.walk('back', float(subcmd))
-        #Thread(target=sub.walk, args=('back', float(subcmd)))
-
-    else:
-        await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.walkback 2'")
-
+        await ctx.send("error, you need to add a direction and time. ex '.walk forward 4'")
 
 @bot.command(name='sc', brief='takes a screenshot and sends it')
 async def sc(ctx):
@@ -157,11 +103,11 @@ async def runtime(ctx):
                       
 @bot.command(name='stop', brief='stops the macro')
 async def stop(ctx):
-    sub.stopmacro()
-    await ctx.send('macro stopped')
+    nw.stop()
 
-    if sendReports:
-        await sc(ctx)
+@bot.command(name='pause')
+async def pause(ctx):
+    nw.pause()
 
 
 @bot.command(name='ping', brief='returns the latency')
@@ -229,22 +175,8 @@ async def stopflying(ctx):
 async def presskey(ctx):
     key = sub.breakCommand(ctx.message.content)
     sub.pressKey(key)
-"""
 
 if __name__ == '__main__':
-    g = Sugarcane("gming")
-    g.start()
+    bot.run(token)
 
-    while True:
-        print("input to controll macro, d = data, p = pause, e = exit")
-        inp = input(">>")
-        if inp == 'd':
-            print(g.getData())
-        elif inp == 'p':
-            g.togglePause()
-            print("paused")
-        elif inp == 'e':
-            g.stop()
-            break
-        else:
-            pass
+

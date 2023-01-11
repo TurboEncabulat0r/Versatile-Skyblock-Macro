@@ -1,9 +1,9 @@
-from macro import Macro
+from macros.macro import Macro
 import time
 
 class Sugarcane(Macro):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self):
+        super().__init__("Sugarcane")
         self.walkTime = 5
         self.walkingForward = False
         self.timestamp = 0

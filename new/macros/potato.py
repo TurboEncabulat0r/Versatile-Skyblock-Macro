@@ -4,7 +4,7 @@ import time
 class Potato(Macro):
     def __init__(self):
         super().__init__("potato")
-        self.walkTime = 44.4
+        self.walkTime = 47
         self.timeStamp = 0
         self.dir = 'r'
 

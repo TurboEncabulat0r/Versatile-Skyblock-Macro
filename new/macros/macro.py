@@ -16,7 +16,7 @@ class Macro:
         self.paused = False
         self.deltaTime = 0
         self.doMacroCheck = False
-        self.takeBreaks = True
+        self.takeBreaks = False
         self.BreakFrequency = 45
         if self.doMacroCheck:
             self.macroCheck = MacroCheck()
@@ -89,30 +89,31 @@ class Macro:
         self.running = False
         self.dispose()
 
-    def doBreakSequene(self):
+    def breakSequene(self):
         self.togglePause()
         self.releaseAllKeys()
 
-        self.write("/bz")
+        self.say("/bz")
         time.sleep(1)
-        mouse.move(0, 0, absolute=True, duration=0.1)
+        mouse.move(893, 550, absolute=True, duration=0.1)
         time.sleep(0.5)
         mouse.click()
-        mouse.move(0, 0, absolute=True, duration=0.1)
+        mouse.move(892, 452, absolute=True, duration=0.1)
         time.sleep(0.5)
         for i in range(3):
             mouse.click()
             time.sleep(0.3)
         self.press("esc", 0.1)
+
         time.sleep(10)
-        self.write("/hub")
+        self.say("/hub")
         time.sleep(1)
         breakTs = time.time() + (60 * 5)
         while time.time() < breakTs:
             # has a 1/10 chance of preforming an action
             if random.randint(0, 10) == 0:
                 if random.randint(0, 1) == 0:
-                    mouse.move(random.randint(-50, 50), random.randint(-50, 50), absolute=True, duration=5)
+                    mouse.move(random.randint(-50, 50), random.randint(-50, 50), absolute=False, duration=5)
                     time.sleep(0.5)
                     for i in range(random.randint(1, 5)):
                         mouse.click()
@@ -182,10 +183,17 @@ class Macro:
     def macro(self):
         statsTS = 0
         deltaTimeTS = 0
+        breakTS = 0
         self.goToFarm()
         self.on_start()
+        breakTS = time.time() + (60 * self.BreakFrequency)
         while self.running:
             if not self.paused:
+
+                if self.takeBreaks and time.time() > breakTS:
+                    self.breakSequene()
+                    breakTS = time.time() + (60 * self.BreakFrequency)
+
                 deltaTimeTS = time.time()
 
                 if statsTS <= time.time():

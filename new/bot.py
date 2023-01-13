@@ -1,4 +1,5 @@
 import io, time
+import mouse, keyboard as kb
 from scripts import subcommands as sub
 from discord.ext import commands
 import configmanager
@@ -183,8 +184,12 @@ async def presskey(ctx):
     key = sub.breakCommand(ctx.message.content)
     sub.pressKey(key)
 
+def printcorrds():
+    print(mouse.get_position())
+
 initTime = time.time()
 if __name__ == '__main__':
     bot.run(token)
+
 
 

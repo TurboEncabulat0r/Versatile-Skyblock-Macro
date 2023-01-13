@@ -9,6 +9,7 @@ import numpy as np
 from PIL import Image
 from macros.sugarcane import Sugarcane
 from macros.netherwart import Netherwart
+from macros.potato import Potato
 
 idOfChannel = 968713627584589845
 
@@ -16,10 +17,11 @@ bot = commands.Bot(command_prefix='.')
 
 
 config = configmanager.read()
-scane = Sugarcane("SugarCane")
+cane = Sugarcane()
 nw = Netherwart()
+potato = Potato()
 
-token = config.token()
+token = config.token
 starttime = 0
 
 sendReports = False
@@ -64,10 +66,15 @@ async def say(ctx):
         await ctx.send("error, you need to add a message to say. ex '.say your mom'")
 
 
-@bot.command(name='startFarming', brief='forces to start farming, use farmcycle instead')
+@bot.command(name='resume', brief='forces to start farming, use farmcycle instead')
 async def resume(ctx):
-    nw.resume()
+    potato.resume()
 
+
+@bot.command(name='start')
+async def start(ctx):
+    await ctx.send('starting')
+    potato.start()
 
 @bot.command(name='walk', brief='.walk forward 4')
 async def walk(ctx):
@@ -103,11 +110,11 @@ async def runtime(ctx):
                       
 @bot.command(name='stop', brief='stops the macro')
 async def stop(ctx):
-    nw.stop()
+    potato.stop()
 
 @bot.command(name='pause')
 async def pause(ctx):
-    nw.pause()
+    potato.togglePause()
 
 
 @bot.command(name='ping', brief='returns the latency')
@@ -176,6 +183,7 @@ async def presskey(ctx):
     key = sub.breakCommand(ctx.message.content)
     sub.pressKey(key)
 
+initTime = time.time()
 if __name__ == '__main__':
     bot.run(token)
 

@@ -33,14 +33,6 @@ def read():
     cfg.token = str(settings['token'])
     cfg.sendReports = bool(settings['sendReports'])
 
-    macros = []
-    for j in controller.getMacroList():
-      mac = {}
-      for m in list(config[j]):
-        mac[m] = j[m]
-
-
-    cfg.macros = macros
 
     return cfg
   except ImportError:

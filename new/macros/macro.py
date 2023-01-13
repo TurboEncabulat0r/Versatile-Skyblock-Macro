@@ -26,28 +26,37 @@ class Macro:
 
     def releaseAllKeys(self):
         for i in self.keys:
-            kb.release(i)
+            self.release(i)
 
     """
     press a key for a certain amount of time, input negative number for infinite time
     when macro is disposed keys will be released
     """
     def press(self, key, delay):
+        if key == 'mouse1':
+            mouse.press("left")
+        elif key == 'mouse2':
+            mouse.press("right")
+        else:
+            kb.press(key)
+
         self.keys.append(key)
-        kb.press(key)
         if delay <= 0:
             return
 
         time.sleep(delay)
-        kb.release(key)
-        self.keys.remove(key)
+        self.release(key)
 
     def release(self, key):
-        kb.release(key)
-        try:
-            self.keys.remove(key)
-        except:
-            pass
+        if key in self.keys:
+            if key == 'mouse1':
+                mouse.release("left")
+            elif key == 'mouse2':
+                mouse.release("right")
+            else:
+                kb.release(key)
+
+                self.keys.remove(key)
 
     def init(self):
         self.thr = Thread(target=self.macro)
@@ -60,13 +69,20 @@ class Macro:
 
     def resume(self):
         self.paused = False
+        self.on_resume()
 
     def start(self):
         if self.paused == False:
+            try:
+                self.thr.start()
+            except:
+                self.init()
+                self.thr.start()
+
             self.running = True
-            self.thr.start()
         else:
             self.resume()
+
     
     def stop(self):
         print(f"stopping macro {self.name}")
@@ -115,9 +131,38 @@ class Macro:
     #must be overriden, it will move the player to the farm
     def goToFarm(self):
         pass
-        
+
+    def resetPositon(self):
+        self.say("/hub")
+        time.sleep(1)
+        self.say("/is")
+        self.press("shift", 1)
+
+    def moveMouse(self, value, t=10, raw=False):
+        #will move the mouse in a way that is friendly to the game because that shit is annoying
+        # it will move it in a direction for an ammount of time
+        x = value[0] * -1
+        y = value[1] * -1
+        if raw:
+            mouse.move(x, y, absolute=False, duration=0.1)
+        else:
+            for i in range(t):
+                mouse.move(mouse.get_position()[0] + x, mouse.get_position()[1] + y, absolute=True, duration=0)
+                time.sleep(0.1)
+
+
+
+
+    # says someting in chat
+    def say(self, s):
+        self.press("t", 0.1)
+        kb.write(s)
+        self.press("enter", 0.1)
+
     def togglePause(self):
         self.paused = not self.paused
+        self.releaseAllKeys()
+        print(f"macro {self.name} paused: {self.paused}")
 
     def write(self, text, delay=0.1):
         pyautogui.write(text, interval=delay)
@@ -130,9 +175,15 @@ class Macro:
     def on_resume(self):
         pass
 
+    #overridable, will be called when the macro is started
+    def on_start(self):
+        print(f"macro {self.name} started")
+
     def macro(self):
         statsTS = 0
         deltaTimeTS = 0
+        self.goToFarm()
+        self.on_start()
         while self.running:
             if not self.paused:
                 deltaTimeTS = time.time()

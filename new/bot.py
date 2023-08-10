@@ -11,20 +11,19 @@ from PIL import Image
 from macros.sugarcane import Sugarcane
 from macros.netherwart import Netherwart
 from macros.potato import Potato
+from macros.coco import Coco
 
 idOfChannel = 968713627584589845
 
 bot = commands.Bot(command_prefix='.')
 
-
 config = configmanager.read()
-cane = Sugarcane()
-nw = Netherwart()
-potato = Potato()
+
+m = [Sugarcane(), Netherwart(), Potato(), Coco()]
+
+mcontroller = controller.MacroController(m)
 
 token = config.token
-starttime = 0
-
 sendReports = False
 
 @bot.event
@@ -69,13 +68,22 @@ async def say(ctx):
 
 @bot.command(name='resume', brief='forces to start farming, use farmcycle instead')
 async def resume(ctx):
-    potato.resume()
+    mcontroller.resume()
 
 
 @bot.command(name='start')
-async def start(ctx):
+async def startMacro(ctx):
+    args = sub.breakString(ctx.message.content, " ")
+
+    if (len(args) <= 1):
+        await ctx.send("error, you need to add a macro name. ex '.start sugarcane'")
+        return
+
+    mcontroller.runMacro(args[1])
     await ctx.send('starting')
-    potato.start()
+
+
+
 
 @bot.command(name='walk', brief='.walk forward 4')
 async def walk(ctx):
@@ -98,24 +106,15 @@ async def sc(ctx):
                       
 @bot.command(name='runtime', brief='tells you how long the macro has been running for')
 async def runtime(ctx):
-    if starttime != 0:
-        if time.time() - starttime < 60:
-            await ctx.send(f'the macro has been running for {round(time.time() - starttime, 5)} sec')
-        elif time.time() - starttime > 60 and time.time() - starttime < 3600:
-            await ctx.send(f'the macro has been running for {round((time.time() - starttime, 2)/60)} min')
-        else:
-            await ctx.send(f'the macro has been running for {round(((time.time() - starttime)/60)/60, 3)} hours')
-    else:
-        await ctx.send(f'the macro is currently not running')
-
+    await ctx.send(f'the macro has been running for {mcontroller.getMacroTime()} sec')
                       
 @bot.command(name='stop', brief='stops the macro')
 async def stop(ctx):
-    potato.stop()
+    mcontroller.stopMacro()
 
 @bot.command(name='pause')
 async def pause(ctx):
-    potato.togglePause()
+    mcontroller.pauseMacro()
 
 
 @bot.command(name='ping', brief='returns the latency')
@@ -167,8 +166,12 @@ async def moveMouse(ctx):
 
 @bot.command()
 async def getAllMacros(ctx):
-    await ctx.send(controller.getAllMacros())
+    macros = mcontroller.getAllMacros()
+    msg = "All Registered Macros: \n"
+    for macro in macros:
+        msg += str(macro) + "\n"
 
+    await ctx.send(msg)
 
 @bot.command()
 async def macro(ctx):

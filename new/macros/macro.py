@@ -23,6 +23,7 @@ class Macro:
         else:
             self.macroCheck = None
         self.init()
+        self._time = 0
 
     def releaseAllKeys(self):
         for i in self.keys:
@@ -128,6 +129,10 @@ class Macro:
         self.goToFarm()
         self.togglePause()
 
+    # will return the unpaused time in seconds
+    def time(self):
+        return self._time
+
 
     #must be overriden, it will move the player to the farm
     def goToFarm(self):
@@ -151,7 +156,22 @@ class Macro:
                 mouse.move(mouse.get_position()[0] + x, mouse.get_position()[1] + y, absolute=True, duration=0)
                 time.sleep(0.1)
 
+    def _updateRout(self):
 
+
+
+
+        return
+
+    """
+    rout:
+    {['w', 's'] : 10,
+     ['a', 'd'] : 3}
+    """
+    def beginRout(self, rout):
+
+
+        return
 
 
     # says someting in chat
@@ -183,6 +203,7 @@ class Macro:
     def macro(self):
         statsTS = 0
         deltaTimeTS = 0
+        timeChangeTs = time.time()
         breakTS = 0
         self.goToFarm()
         self.on_start()
@@ -200,9 +221,14 @@ class Macro:
                     statsTS = time.time() + 4
                     self.stats = self.getStats()
 
-
                 self.update()
                 self.deltaTime = time.time() - deltaTimeTS
+
+                self._time += time.time() - timeChangeTs
+                timeChangeTs = time.time()
+
+            # runs regardless of pause
+            self._updateRout()
 
     #this method should be overriden by the child class
     # will be called every iteration of the macro and is called after getStats
@@ -227,6 +253,10 @@ class Macro:
 
     def __repr__(self):
         return f"Macro('{self.name}')"
+
+    # be sure to append the super().__str__() to the end of the child class
+    def __str__(self):
+        return f"name: {self.name} runtime: {self._time} paused: {self.paused}"
 
 
 

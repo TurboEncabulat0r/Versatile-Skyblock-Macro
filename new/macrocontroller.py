@@ -2,27 +2,27 @@
 class MacroController:
     def __init__(self, m=[]):
         self.macros = m
-        self.running = False
-        self.macroRunning = None
+        self.isRunning = False
+        self.currentMacro = None
 
     def runMacroByIndex(self, index):
-        if not self.macroRunning:
+        if not self.isRunning:
             if index < len(self.macros):
                 print(f"invoking macro {self.macros[index].name}")
                 self.macros[index].start()
-                self.running = True
-                self.macroRunning = self.macros[index]
+                self.isRunning = True
+                self.currentMacro = self.macros[index]
                 return self.macros[index]
             raise MacroNotRegisteredException
         raise MacroAlreadyRunningException
     
     def runMacro(self, macro):
-        if not self.macroRunning:
+        if not self.isRunning:
             for i in self.macros:
                 if i.name == macro:
                     i.start()
-                    self.running = True
-                    self.macroRunning = i
+                    self.isRunning = True
+                    self.currentMacro = i
                     return i
 
             raise MacroNotRegisteredException
@@ -32,21 +32,21 @@ class MacroController:
         self.macros.append(macro)
 
     def stopMacro(self):
-        if self.macroRunning:
-            self.macroRunning.stop()
-            self.running = False
+        if self.isRunning:
+            self.currentMacro.stop()
+            self.isRunning = False
             return
         raise MacroNotRunningException
 
     def resumeMacro(self):
-        if self.macroRunning:
-            self.macroRunning.resume()
+        if self.isRunning:
+            self.currentMacro.resume()
             return
         raise MacroNotRunningException
 
     def pauseMacro(self):
-        if self.macroRunning:
-            self.macroRunning.pause()
+        if self.isRunning:
+            self.currentMacro.pause()
             return
         raise MacroNotRunningException
 
@@ -54,8 +54,8 @@ class MacroController:
         return self.macros
 
     def getMacroTime(self):
-        if self.macroRunning:
-            return self.macroRunning.getTime()
+        if self.isRunning:
+            return self.currentMacro.getTime()
         raise MacroNotRunningException
 
 class MacroNotRunningException(Exception):

@@ -1,21 +1,11 @@
-import io, time
-import mouse, keyboard as kb
+import keyboard as kb
 from scripts import subcommands as sub
-from discord.ext import commands
 import configmanager
 import macrocontroller as controller
-import discord
-import pyautogui
-import numpy as np
-from PIL import Image
 from macros.sugarcane import Sugarcane
 from macros.netherwart import Netherwart
 from macros.potato import Potato
 from macros.coco import Coco
-
-idOfChannel = 968713627584589845
-
-bot = commands.Bot(command_prefix='.')
 
 config = configmanager.read()
 
@@ -23,176 +13,92 @@ m = [Sugarcane(), Netherwart(), Potato(), Coco()]
 
 mcontroller = controller.MacroController(m)
 
-token = config.token
-sendReports = False
 
-@bot.event
-async def on_ready():
-    print(f"bot initalised in {round(time.time() - initTime, 4)} seconds")
-    print(f'logged in as {bot.user.name}')
+macros = ["sugarcane", 'netherwart', 'potato', 'coco']
+
+hotkey = "b"
 
 
-@bot.command(name='dc', brief='disconnects from server')
-async def dc(ctx):
-    await ctx.send("attempting to disconnect")
-    sub.disconnect()
+selectedMacro = 'coco'
 
-
-@bot.command(name='tohub', brief='sends the player to hub')
-async def tohub(ctx):
-    await ctx.send('going to hub')
-    sub.goToHub()
-    if sendReports:
-        await sc(ctx)
-
-
-@bot.command(name='tois', brief='sends the player to the is')
-async def tois(ctx):
-    await ctx.send('going to is')
-    sub.goToIs()
-    if sendReports:
-        await sc(ctx)
-
-
-@bot.command(name='say', brief='says anything in minecraft chat')
-async def say(ctx):
-    imp = ctx.message.content
-    if imp.find(" ") != -1:
-        cmd = imp[0:imp.find(" ")]
-        subcmd = imp[imp.find(" ") + 1: len(imp)]
-        sub.say(subcmd)
-
+hkey = None
+def setHotKey():
+    global hkey
+    if hkey == None:
+        hkey = kb.add_hotkey(hotkey, runMacro)
     else:
-        await ctx.send("error, you need to add a message to say. ex '.say your mom'")
+        kb.remove_all_hotkeys()
+        hkey = kb.add_hotkey(hotkey, runMacro)
 
 
-@bot.command(name='resume', brief='forces to start farming, use farmcycle instead')
-async def resume(ctx):
-    mcontroller.resume()
+def printStatus():
+    print(f"""
+    --Cauldron Macro Engine v0.3.4(manual)--
 
-
-@bot.command(name='start')
-async def startMacro(ctx):
-    args = sub.breakString(ctx.message.content, " ")
-
-    if (len(args) <= 1):
-        await ctx.send("error, you need to add a macro name. ex '.start sugarcane'")
-        return
-
-    mcontroller.runMacro(args[1])
-    await ctx.send('starting')
-
-
-
-
-@bot.command(name='walk', brief='.walk forward 4')
-async def walk(ctx):
-    msg = ctx.message.content
-    cmds = sub.breakString(msg, " ")
-    if len(cmds) == 3:
-        sub.walk(cmds[1], float(cmds[2]))
-    else:
-        await ctx.send("error, you need to add a direction and time. ex '.walk forward 4'")
-
-@bot.command(name='sc', brief='takes a screenshot and sends it')
-async def sc(ctx):
-    #image = pyautogui.screenshot(region=(576, 200, 768, 800))
-    image = pyautogui.screenshot()
-    with io.BytesIO() as image_binary:
-        image.save(image_binary, 'PNG')
-        image_binary.seek(0)
-        await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
-
-                      
-@bot.command(name='runtime', brief='tells you how long the macro has been running for')
-async def runtime(ctx):
-    await ctx.send(f'the macro has been running for {mcontroller.getMacroTime()} sec')
-                      
-@bot.command(name='stop', brief='stops the macro')
-async def stop(ctx):
-    mcontroller.stopMacro()
-
-@bot.command(name='pause')
-async def pause(ctx):
-    mcontroller.pauseMacro()
-
-
-@bot.command(name='ping', brief='returns the latency')
-async def ping(ctx):
-    await ctx.send(f'ping {round(bot.latency * 1000)}ms')
-
+    registered commands:
+    help - displays this list
+    select - selects a macro (1 arg)
+    hotkey - sets hotkey to run macro (1 arg)
+    getAllMacros - prints a list of all macros
     
-@bot.command(name='inv')
-async def inv(ctx):
-    await ctx.send('opening inv')
-    sub.openinv()
-    
-    
-@bot.command(name='esc', brief='presses escape on the keyboard')
-async def esc(ctx):
-    await ctx.send('pressing escape')
-    sub.pressKey('escape')
-    
+    extra:
+    to run macro press the hotkey '{hotkey}'
+    the macro is currently set to '{selectedMacro}'
+    you can change this by running the 'select' command
+    """)
 
-@bot.command(name='sendreports', brief='to toggle on sending reports')
-async def sendreports(ctx):
-    global sendreports
-    if sendreports:
-        sendreports = False
-    else:
-        sendreports = True
-    await ctx.send(f'send reports now set to: {sendreports}')
+macroRunning = False
+def runMacro():
+    global macroRunning
 
-@bot.command()
-async def leftClick(ctx):
-    sub.click("left")
+    try:
+        if not macroRunning:
+            print("[MACRO] manually invoking macro")
+            mcontroller.runMacro(selectedMacro)
+            macroRunning = True
+        else:
+            mcontroller.stopMacro()
+            macroRunning = False
 
-@bot.command()
-async def rightClick(ctx):
-    sub.click("right")
-
-@bot.command(name="moveMouse")
-async def moveMouse(ctx):
-    imp = ctx.message.content
-    if imp.find(" ") != -1:
-        cmd = imp[0:imp.find(" ")]
-        subcmd = imp[imp.find(" ") + 1: len(imp)]
-        sub.mouseMove('up', float(subcmd))
-        #Thread(target=sub.walk, args=('left', float(subcmd)))
-
-    else:
-        await ctx.send("error, you need to add the ammount of seconds you want to walk. ex '.moveMouse 2'")
-    await ctx.send('mouse moved')
-
-@bot.command()
-async def getAllMacros(ctx):
-    macros = mcontroller.getAllMacros()
-    msg = "All Registered Macros: \n"
-    for macro in macros:
-        msg += str(macro) + "\n"
-
-    await ctx.send(msg)
-
-@bot.command()
-async def macro(ctx):
-    macro = sub.breakCommand(ctx.message.content)
+    except controller.MacroAlreadyRunningException:
+        print("error - macro already running!")
 
 
-@bot.command()
-async def stopflying(ctx):
-    sub.pressKey('shift', 2)
+def lookForCmds():
+    global selectedMacro, hotkey
+    while True:
+        inp = input(">> ")
 
-@bot.command()
-async def presskey(ctx):
-    key = sub.breakCommand(ctx.message.content)
-    sub.pressKey(key)
+        args = sub.breakString(inp, " ")
+        if args[0] == 'select':
 
-def printcorrds():
-    print(mouse.get_position())
+            if len(args) > 1:
+                if args[1] in macros:
+                    selectedMacro = args[1]
+                else:
+                    print("error - macro not recognised, use getAllMacros to get a list of all macros")
 
-initTime = time.time()
-if __name__ == '__main__':
-    bot.run(token)
+            else:
+                print("error - please enter a macro to select")
+        elif args[0] == 'help':
+            printStatus()
+        elif args[0] == 'hotkey':
+            if len(args) > 1:
+                if len(args[1]) == 1:
+                    hotkey = args[1]
+                    setHotKey()
+            else:
+                print("error - please enter a key")
+
+        elif args[0] == "getAllMacros":
+            print(mcontroller.getAllMacros())
+
+        else:
+            print("error - command not recognised use 'help'")
 
 
 
+def run():
+    setHotKey()
+    printStatus()
+    lookForCmds()

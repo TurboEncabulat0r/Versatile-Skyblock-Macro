@@ -17,6 +17,7 @@ class Macro:
         self.deltaTime = 0
         self.doMacroCheck = False
         self.takeBreaks = False
+        self.isWorking = True
         self.BreakFrequency = 45
         if self.doMacroCheck:
             self.macroCheck = MacroCheck()

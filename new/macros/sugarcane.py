@@ -3,7 +3,7 @@ import time
 # row 32
 class Sugarcane(Macro):
     def __init__(self):
-        super().__init__("Sugarcane")
+        super().__init__("sugarcane")
         self.walkTime = 7
         self.dir = 'r'
         self.timeStamp = 0
